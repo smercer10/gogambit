@@ -1,0 +1,51 @@
+repos:
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v1.0.0-rc.1
+    hooks:
+      - id: go-mod-tidy-repo
+        name: Update dependencies
+      - id: go-build-repo-mod
+        name: Check build
+      - id: go-test-repo-mod
+        name: Check tests
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.53.3
+    hooks:
+      - id: golangci-lint
+        name: Lint and format Go
+        args: [-E, godot, -E, gofumpt, -E, goimports, -E, gosec, -E, wsl]
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.9.0
+    hooks:
+      - id: yamlfmt
+        name: Format YAML
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.35.0
+    hooks:
+      - id: markdownlint-fix
+        name: Lint Markdown
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        name: Remove trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+        name: Add EOF newline
+      - id: mixed-line-ending
+        name: Fix mixed line ending
+        # - id: no-commit-to-branch
+        #   name: Ensure commit isn't to main
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.15.0
+    hooks:
+      - id: typos
+        name: Check for typos
+        args: []
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        name: Check commit message
+        args: [--contrib=CT1, --ignore=B6, --msg-filename]
+        stages: [commit-msg]

@@ -34,8 +34,8 @@ repos:
         name: Add EOF newline
       - id: mixed-line-ending
         name: Fix mixed line ending
-        # - id: no-commit-to-branch
-        #   name: Ensure commit isn't to main
+      - id: no-commit-to-branch
+        name: Ensure commit isn't to main
   - repo: https://github.com/crate-ci/typos
     rev: v1.15.0
     hooks:

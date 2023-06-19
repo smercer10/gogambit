@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	b "gogambit/engine/bitboard"
+	c "gogambit/engine/const"
+)
 
 func main() {
-	fmt.Println("gogambit")
+	var bb b.Bitboard = 0x0
+
+	bb = b.SetBit(bb, c.D4)
+
+	b.Print(bb)
 }

@@ -1,5 +1,5 @@
-// Package c provides global constants.
-package c
+// Package constants provides global constants.
+package constants
 
 // Enum for squares on the board.
 const (

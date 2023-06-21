@@ -1,13 +1,13 @@
-// Package b provides bitboard utilities.
-package b
+// Package bitboard provides bitboard utilities.
+package bitboard
 
 import "fmt"
 
 // Bitboard is a 64-bit unsigned integer used to represent a chess board.
 type Bitboard uint64
 
-// Print prints a bitboard in a human-readable format along with its hexadecimal representation.
-func Print(bb Bitboard) {
+// PrintBitboard prints a bitboard in a human-readable format along with its hexadecimal representation.
+func PrintBitboard(bb Bitboard) {
 	fmt.Println("  +-----------------+")
 
 	for r := 7; r >= 0; r-- {
@@ -29,13 +29,13 @@ func Print(bb Bitboard) {
 }
 
 // SetBit sets the bit at the given square to 1.
-func SetBit(bb Bitboard, sq int) Bitboard {
-	return bb | (1 << uint(sq))
+func SetBit(bb *Bitboard, sq int) {
+	*bb |= 1 << uint(sq)
 }
 
 // ClearBit sets the bit at the given square to 0.
-func ClearBit(bb Bitboard, sq int) Bitboard {
-	return bb & ^(1 << uint(sq))
+func ClearBit(bb *Bitboard, sq int) {
+	*bb &= ^(1 << uint(sq))
 }
 
 // GetBit returns the bit at the given square.

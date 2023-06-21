@@ -11,10 +11,10 @@ func MaskPawnAttacks(sq int, side int) b.Bitboard {
 
 	b.SetBit(&bb, sq)
 
-	if side == White { // White pawn attacks
+	if side == White {
 		attacks |= (bb << 7) & b.NotFileH // Left
 		attacks |= (bb << 9) & b.NotFileA // Right
-	} else { // Black pawn attacks
+	} else { // side == Black
 		attacks |= (bb >> 7) & b.NotFileA // Left
 		attacks |= (bb >> 9) & b.NotFileH // Right
 	}

@@ -8,19 +8,20 @@ import (
 
 // TestMaskKnightAttacks tests the MaskKnightAttacks function.
 func TestMaskKnightAttacks(t *testing.T) {
-	if result := MaskKnightAttacks(b.H4); result != 0x402000204000 {
-		t.Errorf("MaskKnightAttacks failed: expected 0x402000204000, got 0x%x", result)
+	testCases := []struct {
+		sq       int
+		expected b.Bitboard
+	}{
+		{b.H4, 0x402000204000},
+		{b.A1, 0x20400},
+		{b.E5, 0x28440044280000},
+		{b.B7, 0x800080500000000},
 	}
 
-	if result := MaskKnightAttacks(b.A1); result != 0x20400 {
-		t.Errorf("MaskKnightAttacks failed: expected 0x20400, got 0x%x", result)
-	}
-
-	if result := MaskKnightAttacks(b.E5); result != 0x28440044280000 {
-		t.Errorf("MaskKnightAttacks failed: expected 0x28440044280000, got 0x%x", result)
-	}
-
-	if result := MaskKnightAttacks(b.B7); result != 0x800080500000000 {
-		t.Errorf("MaskKnightAttacks failed: expected 0x800080500000000, got 0x%x", result)
+	for _, tc := range testCases {
+		if result := MaskKnightAttacks(tc.sq); result != tc.expected {
+			t.Errorf("MaskKnightAttacks failed for sq = %d: expected 0x%x, got 0x%x",
+				tc.sq, tc.expected, result)
+		}
 	}
 }

@@ -11,14 +11,14 @@ func MaskKingAttacks(sq int) b.Bitboard {
 
 	b.SetBit(&bb, sq)
 
-	attacks |= bb << 8              // N
-	attacks |= bb << 7 & b.NotFileH // NE
-	attacks |= bb >> 1 & b.NotFileH // E
-	attacks |= bb >> 9 & b.NotFileH // SE
-	attacks |= bb >> 8              // S
-	attacks |= bb >> 7 & b.NotFileA // SW
-	attacks |= bb << 1 & b.NotFileA // W
-	attacks |= bb << 9 & b.NotFileA // NW
+	attacks |= bb << 8                // N
+	attacks |= (bb << 7) & b.NotFileH // NE
+	attacks |= (bb >> 1) & b.NotFileH // E
+	attacks |= (bb >> 9) & b.NotFileH // SE
+	attacks |= bb >> 8                // S
+	attacks |= (bb >> 7) & b.NotFileA // SW
+	attacks |= (bb << 1) & b.NotFileA // W
+	attacks |= (bb << 9) & b.NotFileA // NW
 
 	return attacks
 }

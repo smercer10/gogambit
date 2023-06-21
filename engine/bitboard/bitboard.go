@@ -30,15 +30,15 @@ func PrintBitboard(bb Bitboard) {
 
 // SetBit sets the bit at the given square to 1.
 func SetBit(bb *Bitboard, sq int) {
-	*bb |= 1 << uint(sq)
+	*bb |= 1 << sq
 }
 
 // ClearBit sets the bit at the given square to 0.
 func ClearBit(bb *Bitboard, sq int) {
-	*bb &= ^(1 << uint(sq))
+	*bb &= ^(1 << sq)
 }
 
 // GetBit returns the bit at the given square.
 func GetBit(bb Bitboard, sq int) bool {
-	return (bb & (1 << uint(sq))) != 0
+	return (bb & (1 << sq)) != 0
 }

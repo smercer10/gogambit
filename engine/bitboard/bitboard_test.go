@@ -1,9 +1,7 @@
 // Package bitboard provides bitboard utilities.
 package bitboard
 
-import (
-	"testing"
-)
+import "testing"
 
 // TestSetBit tests the SetBit function.
 func TestSetBit(t *testing.T) {
@@ -43,19 +41,20 @@ func TestClearBit(t *testing.T) {
 func TestGetBit(t *testing.T) {
 	var bb Bitboard = 0x8000000000000001
 
-	if !GetBit(bb, A1) {
-		t.Errorf("GetBit failed: expected true, got false")
+	testCases := []struct {
+		sq       int
+		expected bool
+	}{
+		{A1, true},
+		{H8, true},
+		{A2, false},
+		{H7, false},
 	}
 
-	if !GetBit(bb, H8) {
-		t.Errorf("GetBit failed: expected true, got false")
-	}
-
-	if GetBit(bb, A2) {
-		t.Errorf("GetBit failed: expected false, got true")
-	}
-
-	if GetBit(bb, H7) {
-		t.Errorf("GetBit failed: expected false, got true")
+	for _, tc := range testCases {
+		if result := GetBit(bb, tc.sq); result != tc.expected {
+			t.Errorf("GetBit failed for bb = 0x%x, sq = %d: expected %t, got %t",
+				bb, tc.sq, tc.expected, result)
+		}
 	}
 }

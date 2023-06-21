@@ -8,19 +8,21 @@ import (
 
 // TestMaskPawnAttacks tests the MaskPawnAttacks function.
 func TestMaskPawnAttacks(t *testing.T) {
-	if result := MaskPawnAttacks(b.H4, Black); result != 0x400000 {
-		t.Errorf("MaskPawnAttacks failed: expected 0x400000, got 0x%x", result)
+	testCases := []struct {
+		sq       int
+		side     int
+		expected b.Bitboard
+	}{
+		{b.H4, Black, 0x400000},
+		{b.B3, White, 0x5000000},
+		{b.E8, White, 0x0},
+		{b.A1, Black, 0x0},
 	}
 
-	if result := MaskPawnAttacks(b.B3, White); result != 0x5000000 {
-		t.Errorf("MaskPawnAttacks failed: expected 0x5000000, got 0x%x", result)
-	}
-
-	if result := MaskPawnAttacks(b.E8, White); result != 0x0 {
-		t.Errorf("MaskPawnAttacks failed: expected 0x0, got 0x%x", result)
-	}
-
-	if result := MaskPawnAttacks(b.A1, Black); result != 0x0 {
-		t.Errorf("MaskPawnAttacks failed: expected 0x0, got 0x%x", result)
+	for _, tc := range testCases {
+		if result := MaskPawnAttacks(tc.sq, tc.side); result != tc.expected {
+			t.Errorf("MaskPawnAttacks failed for sq = %d, side = %d: expected 0x%x, got 0x%x",
+				tc.sq, tc.side, tc.expected, result)
+		}
 	}
 }

@@ -1,8 +1,8 @@
-// Package b provides bitboard utilities.
-package b
+// Package bitboard provides bitboard utilities.
+package bitboard
 
 import (
-	c "gogambit/engine/const"
+	c "gogambit/engine/constants"
 	"testing"
 )
 
@@ -10,11 +10,15 @@ import (
 func TestSetBit(t *testing.T) {
 	var bb Bitboard = 0x0
 
-	if bb = SetBit(bb, c.A1); bb != 0x1 {
+	SetBit(&bb, c.A1)
+
+	if bb != 0x1 {
 		t.Errorf("SetBit failed: expected 0x1, got 0x%x", bb)
 	}
 
-	if bb = SetBit(bb, c.H8); bb != 0x8000000000000001 {
+	SetBit(&bb, c.H8)
+
+	if bb != 0x8000000000000001 {
 		t.Errorf("SetBit failed: expected 0x8000000000000001, got 0x%x", bb)
 	}
 }
@@ -23,11 +27,15 @@ func TestSetBit(t *testing.T) {
 func TestClearBit(t *testing.T) {
 	var bb Bitboard = 0x8000000000000001
 
-	if bb = ClearBit(bb, c.A1); bb != 0x8000000000000000 {
+	ClearBit(&bb, c.A1)
+
+	if bb != 0x8000000000000000 {
 		t.Errorf("ClearBit failed: expected 0x8000000000000000, got 0x%x", bb)
 	}
 
-	if bb = ClearBit(bb, c.H8); bb != 0x0 {
+	ClearBit(&bb, c.H8)
+
+	if bb != 0x0 {
 		t.Errorf("ClearBit failed: expected 0x0, got 0x%x", bb)
 	}
 }

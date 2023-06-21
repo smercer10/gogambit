@@ -31,7 +31,7 @@ repos:
         name: Remove trailing whitespace
         args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
-        name: Add EOF newline
+        name: Add end-of-file newline
       - id: mixed-line-ending
         name: Fix mixed line ending
       - id: no-commit-to-branch

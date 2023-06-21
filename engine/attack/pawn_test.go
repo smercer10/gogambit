@@ -1,5 +1,5 @@
-// Package attacks provides attack generation utilities.
-package attacks
+// Package attack provides attack generation utilities.
+package attack
 
 import (
 	b "gogambit/engine/bitboard"

@@ -9,6 +9,6 @@ func main() {
 	a.InitLeaperAttacks()
 
 	for sq := b.A1; sq <= b.H8; sq++ {
-		b.PrintBitboard(a.PawnAttacks[a.Black][sq])
+		b.PrintBitboard(a.KnightAttacks[sq])
 	}
 }

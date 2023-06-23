@@ -7,7 +7,7 @@ import b "gogambit/engine/bitboard"
 func MaskKnightAttacks(sq int) b.Bitboard {
 	attacks := b.Bitboard(0x0)
 
-	var bb b.Bitboard = 0x0
+	bb := b.Bitboard(0x0)
 
 	b.SetBit(&bb, sq)
 

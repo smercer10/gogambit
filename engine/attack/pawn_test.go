@@ -9,9 +9,9 @@ import (
 // TestMaskPawnAttacks tests the MaskPawnAttacks function.
 func TestMaskPawnAttacks(t *testing.T) {
 	testCases := []struct {
-		sq       int
-		side     int
-		expected b.Bitboard
+		sq     int
+		side   int
+		expect b.Bitboard
 	}{
 		{b.H4, Black, 0x400000},
 		{b.B3, White, 0x5000000},
@@ -20,9 +20,9 @@ func TestMaskPawnAttacks(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskPawnAttacks(tc.sq, tc.side); result != tc.expected {
-			t.Errorf("MaskPawnAttacks failed for sq = %d, side = %d: expected 0x%x, got 0x%x",
-				tc.sq, tc.side, tc.expected, result)
+		if result := MaskPawnAttacks(tc.sq, tc.side); result != tc.expect {
+			t.Errorf("MaskPawnAttacks failed for sq = %d, side = %d: expect 0x%x, got 0x%x",
+				tc.sq, tc.side, tc.expect, result)
 		}
 	}
 }

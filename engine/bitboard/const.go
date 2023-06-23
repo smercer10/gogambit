@@ -70,13 +70,13 @@ const (
 )
 
 // NotFileA is a bitboard with only the A file cleared.
-const NotFileA = 0xfefefefefefefefe
+const NotFileA = Bitboard(0xfefefefefefefefe)
 
 // NotFileH is a bitboard with only the H file cleared.
-const NotFileH = 0x7f7f7f7f7f7f7f7f
+const NotFileH = Bitboard(0x7f7f7f7f7f7f7f7f)
 
 // NotFileAB is a bitboard with only the A and B files cleared.
-const NotFileAB = 0xfcfcfcfcfcfcfcfc
+const NotFileAB = Bitboard(0xfcfcfcfcfcfcfcfc)
 
 // NotFileGH is a bitboard with only the G and H files cleared.
-const NotFileGH = 0x3f3f3f3f3f3f3f3f
+const NotFileGH = Bitboard(0x3f3f3f3f3f3f3f3f)

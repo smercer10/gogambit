@@ -5,9 +5,9 @@ import b "gogambit/engine/bitboard"
 
 // MaskPawnAttacks generates the pawn attacks for a given square and side.
 func MaskPawnAttacks(sq int, side int) b.Bitboard {
-	var attacks b.Bitboard = 0x0
+	attacks := b.Bitboard(0x0)
 
-	var bb b.Bitboard = 0x0
+	bb := b.Bitboard(0x0)
 
 	b.SetBit(&bb, sq)
 

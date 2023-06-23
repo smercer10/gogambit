@@ -6,9 +6,5 @@ import (
 )
 
 func main() {
-	a.InitLeaperAttacks()
-
-	for sq := b.A1; sq <= b.H8; sq++ {
-		b.PrintBitboard(a.KingAttacks[sq])
-	}
+	b.PrintBitboard(a.MaskBishopOccupancy(b.E5))
 }

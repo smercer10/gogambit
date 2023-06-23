@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	b.PrintBitboard(a.MaskBishopOccupancy(b.E5))
+	b.PrintBitboard(a.MaskRookOccupancy(b.H8))
 }

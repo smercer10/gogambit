@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestMaskBishopOccupancy tests the MaskBishopOccupancy function.
 func TestMaskBishopOccupancy(t *testing.T) {
 	testCases := []struct {
 		sq     int

@@ -9,8 +9,8 @@ import (
 // TestMaskKingAttacks tests the MaskKingAttacks function.
 func TestMaskKingAttacks(t *testing.T) {
 	testCases := []struct {
-		sq       int
-		expected b.Bitboard
+		sq     int
+		expect b.Bitboard
 	}{
 		{b.H8, 0x40c0000000000000},
 		{b.A1, 0x302},
@@ -19,9 +19,9 @@ func TestMaskKingAttacks(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskKingAttacks(tc.sq); result != tc.expected {
-			t.Errorf("MaskKingAttacks failed for sq = %d: expected 0x%x, got 0x%x",
-				tc.sq, tc.expected, result)
+		if result := MaskKingAttacks(tc.sq); result != tc.expect {
+			t.Errorf("MaskKingAttacks failed for sq = %d: expect 0x%x, got 0x%x",
+				tc.sq, tc.expect, result)
 		}
 	}
 }

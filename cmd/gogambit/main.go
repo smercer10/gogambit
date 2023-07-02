@@ -1,10 +1,12 @@
 package main
 
 import (
-	a "gogambit/engine/attack"
-	b "gogambit/engine/bitboard"
+	a "gogambit/engine/attacks"
+	. "gogambit/engine/enums"
 )
 
 func main() {
-	b.PrintBitboard(a.MaskRookOccupancy(b.H8))
+	bb := a.MaskRookOccupancy(H8)
+
+	bb.Print()
 }

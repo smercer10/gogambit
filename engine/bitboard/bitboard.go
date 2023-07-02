@@ -1,4 +1,4 @@
-// Package bitboard provides bitboard utilities.
+// Package bitboard provides the bitboard type and relevant utilities.
 package bitboard
 
 import "fmt"
@@ -6,8 +6,8 @@ import "fmt"
 // Bitboard is a 64-bit unsigned integer used to represent a chess board.
 type Bitboard uint64
 
-// PrintBitboard prints a bitboard in a human-readable format along with its hexadecimal representation.
-func PrintBitboard(bb Bitboard) {
+// Print prints a bitboard in a human-readable format along with its hexadecimal representation.
+func (bb *Bitboard) Print() {
 	fmt.Println("  +-----------------+")
 
 	for r := 7; r >= 0; r-- {
@@ -15,7 +15,7 @@ func PrintBitboard(bb Bitboard) {
 
 		for f := 0; f < 8; f++ {
 			sq := r*8 + f
-			if GetBit(bb, sq) {
+			if bb.GetBit(sq) {
 				fmt.Print("1 ")
 			} else {
 				fmt.Print("0 ")
@@ -25,20 +25,20 @@ func PrintBitboard(bb Bitboard) {
 	}
 	fmt.Println("  +-----------------+")
 	fmt.Println("    a b c d e f g h")
-	fmt.Printf("\nBitboard: 0x%x\n", bb)
+	fmt.Printf("\nBitboard: 0x%x\n", *bb)
 }
 
 // SetBit sets the bit at the given square to 1.
-func SetBit(bb *Bitboard, sq int) {
+func (bb *Bitboard) SetBit(sq int) {
 	*bb |= 1 << sq
 }
 
 // ClearBit sets the bit at the given square to 0.
-func ClearBit(bb *Bitboard, sq int) {
+func (bb *Bitboard) ClearBit(sq int) {
 	*bb &= ^(1 << sq)
 }
 
 // GetBit returns the bit at the given square.
-func GetBit(bb Bitboard, sq int) bool {
-	return (bb & (1 << sq)) != 0
+func (bb *Bitboard) GetBit(sq int) bool {
+	return (*bb>>sq)&1 == 1
 }

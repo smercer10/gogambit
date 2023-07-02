@@ -1,8 +1,9 @@
-// Package attack provides attack generation utilities.
-package attack
+// Package attacks provides attack generation utilities.
+package attacks
 
 import (
-	b "gogambit/engine/bitboard"
+	. "gogambit/engine/bitboard"
+	. "gogambit/engine/enums"
 	"testing"
 )
 
@@ -10,12 +11,12 @@ import (
 func TestMaskKingAttacks(t *testing.T) {
 	testCases := []struct {
 		sq     int
-		expect b.Bitboard
+		expect Bitboard
 	}{
-		{b.H8, 0x40c0000000000000},
-		{b.A1, 0x302},
-		{b.E5, 0x382838000000},
-		{b.A4, 0x302030000},
+		{H8, 0x40c0000000000000},
+		{A1, 0x302},
+		{E5, 0x382838000000},
+		{A4, 0x302030000},
 	}
 
 	for _, tc := range testCases {

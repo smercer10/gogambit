@@ -1,12 +1,12 @@
 // Package attacks provides attack generation utilities.
 package attacks
 
-import b "gogambit/engine/bitboard"
+import . "gogambit/engine/bitboard"
 
 // MaskBishopOccupancy masks the relevant bishop occupancy bits for a given square.
 // This forms a key for magic bitboards.
-func MaskBishopOccupancy(sq int) b.Bitboard {
-	occupancy := b.Bitboard(0x0)
+func MaskBishopOccupancy(sq int) Bitboard {
+	occupancy := Bitboard(0x0)
 
 	tr := sq / 8
 	tf := sq % 8

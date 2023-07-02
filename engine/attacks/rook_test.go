@@ -2,7 +2,7 @@
 package attacks
 
 import (
-	b "gogambit/engine/bitboard"
+	. "gogambit/engine/bitboard"
 	. "gogambit/engine/enums"
 	"testing"
 )
@@ -11,7 +11,7 @@ import (
 func TestMaskRookOccupancy(t *testing.T) {
 	testCases := []struct {
 		sq     int
-		expect b.Bitboard
+		expect Bitboard
 	}{
 		{H8, 0x7e80808080808000},
 		{A3, 0x10101017e0100},

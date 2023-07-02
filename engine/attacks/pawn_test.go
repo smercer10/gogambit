@@ -2,7 +2,7 @@
 package attacks
 
 import (
-	b "gogambit/engine/bitboard"
+	. "gogambit/engine/bitboard"
 	. "gogambit/engine/enums"
 	"testing"
 )
@@ -12,7 +12,7 @@ func TestMaskPawnAttacks(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		side   int
-		expect b.Bitboard
+		expect Bitboard
 	}{
 		{H4, Black, 0x400000},
 		{B3, White, 0x5000000},

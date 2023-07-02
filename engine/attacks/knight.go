@@ -1,24 +1,24 @@
 // Package attacks provides attack generation utilities.
 package attacks
 
-import b "gogambit/engine/bitboard"
+import . "gogambit/engine/bitboard"
 
 // MaskKnightAttacks generates the knight attacks for a given square.
-func MaskKnightAttacks(sq int) b.Bitboard {
-	attacks := b.Bitboard(0x0)
+func MaskKnightAttacks(sq int) Bitboard {
+	attacks := Bitboard(0x0)
 
-	bb := b.Bitboard(0x0)
+	bb := Bitboard(0x0)
 
 	bb.SetBit(sq)
 
-	attacks |= (bb << 17) & b.NotFileA  // N2W1
-	attacks |= (bb << 10) & b.NotFileAB // N1W2
-	attacks |= (bb << 15) & b.NotFileH  // N2E1
-	attacks |= (bb << 6) & b.NotFileGH  // N1E2
-	attacks |= (bb >> 6) & b.NotFileAB  // S1W2
-	attacks |= (bb >> 15) & b.NotFileA  // S2W1
-	attacks |= (bb >> 10) & b.NotFileGH // S1E2
-	attacks |= (bb >> 17) & b.NotFileH  // S2E1
+	attacks |= (bb << 17) & NotFileA  // N2W1
+	attacks |= (bb << 10) & NotFileAB // N1W2
+	attacks |= (bb << 15) & NotFileH  // N2E1
+	attacks |= (bb << 6) & NotFileGH  // N1E2
+	attacks |= (bb >> 6) & NotFileAB  // S1W2
+	attacks |= (bb >> 15) & NotFileA  // S2W1
+	attacks |= (bb >> 10) & NotFileGH // S1E2
+	attacks |= (bb >> 17) & NotFileH  // S2E1
 
 	return attacks
 }

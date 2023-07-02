@@ -1,7 +1,10 @@
-// Package attack provides attack generation utilities.
-package attack
+// Package attacks provides attack generation utilities.
+package attacks
 
-import b "gogambit/engine/bitboard"
+import (
+	b "gogambit/engine/bitboard"
+	. "gogambit/engine/enums"
+)
 
 // MaskPawnAttacks generates the pawn attacks for a given square and side.
 func MaskPawnAttacks(sq int, side int) b.Bitboard {

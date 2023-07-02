@@ -1,7 +1,10 @@
-// Package bitboard provides the bitboard type and utilities.
+// Package bitboard provides the bitboard type and relevant utilities.
 package bitboard
 
-import "testing"
+import (
+	. "gogambit/engine/enums"
+	"testing"
+)
 
 // TestSetBit tests the SetBit function.
 func TestSetBit(t *testing.T) {

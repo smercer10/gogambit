@@ -1,4 +1,4 @@
-// Package bitboard provides the bitboard type and utilities.
+// Package bitboard provides the bitboard type and relevant utilities.
 package bitboard
 
 import "fmt"

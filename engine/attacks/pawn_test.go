@@ -1,8 +1,9 @@
-// Package attack provides attack generation utilities.
-package attack
+// Package attacks provides attack generation utilities.
+package attacks
 
 import (
 	b "gogambit/engine/bitboard"
+	. "gogambit/engine/enums"
 	"testing"
 )
 
@@ -13,10 +14,10 @@ func TestMaskPawnAttacks(t *testing.T) {
 		side   int
 		expect b.Bitboard
 	}{
-		{b.H4, Black, 0x400000},
-		{b.B3, White, 0x5000000},
-		{b.E8, White, 0x0},
-		{b.A1, Black, 0x0},
+		{H4, Black, 0x400000},
+		{B3, White, 0x5000000},
+		{E8, White, 0x0},
+		{A1, Black, 0x0},
 	}
 
 	for _, tc := range testCases {

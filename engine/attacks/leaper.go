@@ -1,7 +1,10 @@
-// Package attack provides attack generation utilities.
-package attack
+// Package attacks provides attack generation utilities.
+package attacks
 
-import b "gogambit/engine/bitboard"
+import (
+	b "gogambit/engine/bitboard"
+	. "gogambit/engine/enums"
+)
 
 // PawnAttacks is a lookup table for pawn attacks.
 var PawnAttacks [2][64]b.Bitboard
@@ -14,7 +17,7 @@ var KingAttacks [64]b.Bitboard
 
 // InitLeaperAttacks initializes the lookup tables for leaper piece attacks.
 func InitLeaperAttacks() {
-	for sq := b.A1; sq <= b.H8; sq++ {
+	for sq := A1; sq <= H8; sq++ {
 		PawnAttacks[White][sq] = MaskPawnAttacks(sq, White)
 		PawnAttacks[Black][sq] = MaskPawnAttacks(sq, Black)
 		KnightAttacks[sq] = MaskKnightAttacks(sq)

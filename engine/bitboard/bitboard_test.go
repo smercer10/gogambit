@@ -1,4 +1,4 @@
-// Package bitboard provides bitboard utilities.
+// Package bitboard provides the bitboard type and utilities.
 package bitboard
 
 import "testing"
@@ -7,13 +7,13 @@ import "testing"
 func TestSetBit(t *testing.T) {
 	bb := Bitboard(0x0)
 
-	SetBit(&bb, A1)
+	bb.SetBit(A1)
 
 	if bb != 0x1 {
 		t.Errorf("SetBit failed: expect 0x1, got 0x%x", bb)
 	}
 
-	SetBit(&bb, H8)
+	bb.SetBit(H8)
 
 	if bb != 0x8000000000000001 {
 		t.Errorf("SetBit failed: expect 0x8000000000000001, got 0x%x", bb)
@@ -24,13 +24,13 @@ func TestSetBit(t *testing.T) {
 func TestClearBit(t *testing.T) {
 	bb := Bitboard(0x8000000000000001)
 
-	ClearBit(&bb, A1)
+	bb.ClearBit(A1)
 
 	if bb != 0x8000000000000000 {
 		t.Errorf("ClearBit failed: expect 0x8000000000000000, got 0x%x", bb)
 	}
 
-	ClearBit(&bb, H8)
+	bb.ClearBit(H8)
 
 	if bb != 0x0 {
 		t.Errorf("ClearBit failed: expect 0x0, got 0x%x", bb)
@@ -52,7 +52,7 @@ func TestGetBit(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GetBit(bb, tc.sq); result != tc.expect {
+		if result := bb.GetBit(tc.sq); result != tc.expect {
 			t.Errorf("GetBit failed for bb = 0x%x, sq = %d: expect %t, got %t",
 				bb, tc.sq, tc.expect, result)
 		}

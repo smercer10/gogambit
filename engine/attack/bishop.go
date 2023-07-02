@@ -13,22 +13,22 @@ func MaskBishopOccupancy(sq int) b.Bitboard {
 
 	// NE
 	for r, f := tr+1, tf+1; r <= 6 && f <= 6; r, f = r+1, f+1 {
-		b.SetBit(&occupancy, r*8+f)
+		occupancy.SetBit(r*8 + f)
 	}
 
 	// NW
 	for r, f := tr+1, tf-1; r <= 6 && f >= 1; r, f = r+1, f-1 {
-		b.SetBit(&occupancy, r*8+f)
+		occupancy.SetBit(r*8 + f)
 	}
 
 	// SE
 	for r, f := tr-1, tf+1; r >= 1 && f <= 6; r, f = r-1, f+1 {
-		b.SetBit(&occupancy, r*8+f)
+		occupancy.SetBit(r*8 + f)
 	}
 
 	// SW
 	for r, f := tr-1, tf-1; r >= 1 && f >= 1; r, f = r-1, f-1 {
-		b.SetBit(&occupancy, r*8+f)
+		occupancy.SetBit(r*8 + f)
 	}
 
 	return occupancy

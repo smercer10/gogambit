@@ -6,5 +6,7 @@ import (
 )
 
 func main() {
-	b.PrintBitboard(a.MaskRookOccupancy(b.H8))
+	bb := a.MaskRookOccupancy(b.H8)
+
+	bb.Print()
 }

@@ -12,7 +12,7 @@ func MaskPawnAttacks(sq int, side int) Bitboard {
 
 	bb := Bitboard(0x0)
 
-	bb.SetBit(sq)
+	bb = bb.SetBit(sq)
 
 	if side == White {
 		attacks |= (bb << 7) & NotFileH // Left

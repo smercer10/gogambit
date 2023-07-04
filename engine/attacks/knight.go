@@ -9,7 +9,7 @@ func MaskKnightAttacks(sq int) Bitboard {
 
 	bb := Bitboard(0x0)
 
-	bb.SetBit(sq)
+	bb = bb.SetBit(sq)
 
 	attacks |= (bb << 17) & NotFileA  // N2W1
 	attacks |= (bb << 10) & NotFileAB // N1W2

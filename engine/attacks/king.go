@@ -9,7 +9,7 @@ func MaskKingAttacks(sq int) Bitboard {
 
 	bb := Bitboard(0x0)
 
-	bb.SetBit(sq)
+	bb = bb.SetBit(sq)
 
 	attacks |= bb << 8              // N
 	attacks |= (bb << 7) & NotFileH // NE

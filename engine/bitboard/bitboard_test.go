@@ -10,13 +10,13 @@ import (
 func TestSetBit(t *testing.T) {
 	bb := Bitboard(0x0)
 
-	bb.SetBit(A1)
+	bb = bb.SetBit(A1)
 
 	if bb != 0x1 {
 		t.Errorf("SetBit failed: expect 0x1, got 0x%x", bb)
 	}
 
-	bb.SetBit(H8)
+	bb = bb.SetBit(H8)
 
 	if bb != 0x8000000000000001 {
 		t.Errorf("SetBit failed: expect 0x8000000000000001, got 0x%x", bb)
@@ -27,13 +27,13 @@ func TestSetBit(t *testing.T) {
 func TestClearBit(t *testing.T) {
 	bb := Bitboard(0x8000000000000001)
 
-	bb.ClearBit(A1)
+	bb = bb.ClearBit(A1)
 
 	if bb != 0x8000000000000000 {
 		t.Errorf("ClearBit failed: expect 0x8000000000000000, got 0x%x", bb)
 	}
 
-	bb.ClearBit(H8)
+	bb = bb.ClearBit(H8)
 
 	if bb != 0x0 {
 		t.Errorf("ClearBit failed: expect 0x0, got 0x%x", bb)

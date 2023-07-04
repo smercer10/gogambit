@@ -1,7 +1,10 @@
 // Package bitboard provides the bitboard type and relevant utilities.
 package bitboard
 
-import "fmt"
+import (
+	"fmt"
+	"math/bits"
+)
 
 // Bitboard is a 64-bit unsigned integer used to represent a chess board.
 type Bitboard uint64
@@ -28,12 +31,12 @@ func (bb Bitboard) Print() {
 	fmt.Printf("\nBitboard: 0x%x\n", bb)
 }
 
-// SetBit returns a copy of bb with the bit at the given square set to 1.
+// SetBit returns a copy of a bitboard with the bit at the given square set to 1.
 func (bb Bitboard) SetBit(sq int) Bitboard {
 	return bb | (1 << sq)
 }
 
-// ClearBit returns a copy of bb with the bit at the given square set to 0.
+// ClearBit returns a copy of a bitboard with the bit at the given square set to 0.
 func (bb Bitboard) ClearBit(sq int) Bitboard {
 	return bb &^ (1 << sq)
 }
@@ -41,4 +44,18 @@ func (bb Bitboard) ClearBit(sq int) Bitboard {
 // GetBit returns the bit at the given square.
 func (bb Bitboard) GetBit(sq int) bool {
 	return bb&(1<<sq) != 0
+}
+
+// CountBits returns the number of bits set to 1 in a bitboard.
+func (bb Bitboard) CountBits() int {
+	return bits.OnesCount64(uint64(bb))
+}
+
+// GetLeastSignificantBit returns the index of the least significant bit set to 1 in a bitboard.
+func (bb Bitboard) GetLeastSignificantBit() int {
+	if bb == 0 {
+		return -1
+	}
+
+	return bits.TrailingZeros64(uint64(bb))
 }

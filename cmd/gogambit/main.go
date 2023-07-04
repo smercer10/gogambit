@@ -1,16 +1,17 @@
 package main
 
 import (
-	a "gogambit/engine/attacks"
+	"fmt"
 	. "gogambit/engine/bitboard"
-	. "gogambit/engine/enums"
+	. "gogambit/engine/globals"
 )
 
 func main() {
-	blockers := Bitboard(0x0)
-	blockers = blockers.SetBit(D5)
-	attacks := a.GenRookAttacksOnTheFly(H8, blockers)
+	bb := Bitboard(0x0)
+	bb = bb.SetBit(H7)
+	bb = bb.SetBit(D8)
 
-	attacks.Print()
-	blockers.Print()
+	bb.Print()
+	fmt.Printf("%b\n", bb)
+	fmt.Println(Squares[bb.GetLeastSignificantBit()])
 }

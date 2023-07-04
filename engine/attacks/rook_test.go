@@ -26,3 +26,24 @@ func TestMaskRookOccupancy(t *testing.T) {
 		}
 	}
 }
+
+// TestGenRookAttacksOnTheFly tests the GenRookAttacksOnTheFly function.
+func TestGenRookAttacksOnTheFly(t *testing.T) {
+	testCases := []struct {
+		sq       int
+		blockers Bitboard
+		expect   Bitboard
+	}{
+		{D4, 0x822000000, 0x836080808},
+		{E3, 0x10000000880000, 0x10101010e81010},
+		{A1, 0x100010060, 0x1013e},
+		{H8, 0x0, 0x7f80808080808080},
+	}
+
+	for _, tc := range testCases {
+		if result := GenRookAttacksOnTheFly(tc.sq, tc.blockers); result != tc.expect {
+			t.Errorf("GenRookAttacksOnTheFly failed for sq = %d, blockers = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.blockers, tc.expect, result)
+		}
+	}
+}

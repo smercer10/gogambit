@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	. "gogambit/engine/bitboard"
+	a "gogambit/engine/attacks"
 	. "gogambit/engine/globals"
 )
 
 func main() {
-	bb := Bitboard(0x0)
-	bb = bb.SetBit(H7)
-	bb = bb.SetBit(D8)
+	mask := a.MaskBishopOccupancy(C3)
 
-	bb.Print()
-	fmt.Printf("%b\n", bb)
-	fmt.Println(Squares[bb.GetLeastSignificantBit()])
+	for i := 0; i < 10; i++ {
+		occupancy := a.SetOccupancy(mask, i)
+		occupancy.Print()
+		fmt.Println(i)
+	}
 }

@@ -2,7 +2,7 @@
 package bitboard
 
 import (
-	. "gogambit/engine/enums"
+	. "gogambit/engine/globals"
 	"testing"
 )
 
@@ -77,6 +77,26 @@ func TestCountBits(t *testing.T) {
 	for _, tc := range testCases {
 		if result := tc.bb.CountBits(); result != tc.expect {
 			t.Errorf("CountBits failed for bb = 0x%x: expect %d, got %d",
+				tc.bb, tc.expect, result)
+		}
+	}
+}
+
+// TestGetLeastSignificantBit tests the GetLeastSignificantBit function.
+func TestGetLeastSignificantBit(t *testing.T) {
+	testCases := []struct {
+		bb     Bitboard
+		expect int
+	}{
+		{0x0, -1},
+		{0x1, 0},
+		{0x80000000800002, 1},
+		{0x880000000000000, 55},
+	}
+
+	for _, tc := range testCases {
+		if result := tc.bb.GetLeastSignificantBit(); result != tc.expect {
+			t.Errorf("GetLeastSignificantBit failed for bb = 0x%x: expect %d, got %d",
 				tc.bb, tc.expect, result)
 		}
 	}

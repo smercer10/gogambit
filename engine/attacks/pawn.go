@@ -3,7 +3,7 @@ package attacks
 
 import (
 	. "gogambit/engine/bitboard"
-	. "gogambit/engine/enums"
+	. "gogambit/engine/globals"
 )
 
 // MaskPawnAttacks generates the pawn attacks for a given square and side.

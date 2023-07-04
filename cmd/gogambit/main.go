@@ -8,8 +8,9 @@ import (
 
 func main() {
 	blockers := Bitboard(0x0)
-	attack := a.GenBishopAttacksOnTheFly(H8, blockers)
+	blockers = blockers.SetBit(D5)
+	attacks := a.GenRookAttacksOnTheFly(H8, blockers)
 
-	attack.Print()
+	attacks.Print()
 	blockers.Print()
 }

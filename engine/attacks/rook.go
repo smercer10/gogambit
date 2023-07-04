@@ -33,3 +33,49 @@ func MaskRookOccupancy(sq int) Bitboard {
 
 	return occupancy
 }
+
+// GenRookAttacksOnTheFly generates possible rook attacks for a given square and mask of blockers.
+func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
+	attacks := Bitboard(0x0)
+
+	tr := sq / 8
+	tf := sq % 8
+
+	// N
+	for r := tr + 1; r <= 7; r++ {
+		attacks = attacks.SetBit(r*8 + tf)
+
+		if blockers.GetBit(r*8 + tf) {
+			break
+		}
+	}
+
+	// S
+	for r := tr - 1; r >= 0; r-- {
+		attacks = attacks.SetBit(r*8 + tf)
+
+		if blockers.GetBit(r*8 + tf) {
+			break
+		}
+	}
+
+	// E
+	for f := tf + 1; f <= 7; f++ {
+		attacks = attacks.SetBit(tr*8 + f)
+
+		if blockers.GetBit(tr*8 + f) {
+			break
+		}
+	}
+
+	// W
+	for f := tf - 1; f >= 0; f-- {
+		attacks = attacks.SetBit(tr*8 + f)
+
+		if blockers.GetBit(tr*8 + f) {
+			break
+		}
+	}
+
+	return attacks
+}

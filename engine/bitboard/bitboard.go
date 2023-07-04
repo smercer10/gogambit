@@ -7,7 +7,7 @@ import "fmt"
 type Bitboard uint64
 
 // Print prints a bitboard in a human-readable format along with its hexadecimal representation.
-func (bb *Bitboard) Print() {
+func (bb Bitboard) Print() {
 	fmt.Println("  +-----------------+")
 
 	for r := 7; r >= 0; r-- {
@@ -25,20 +25,20 @@ func (bb *Bitboard) Print() {
 	}
 	fmt.Println("  +-----------------+")
 	fmt.Println("    a b c d e f g h")
-	fmt.Printf("\nBitboard: 0x%x\n", *bb)
+	fmt.Printf("\nBitboard: 0x%x\n", bb)
 }
 
-// SetBit sets the bit at the given square to 1.
-func (bb *Bitboard) SetBit(sq int) {
-	*bb |= 1 << sq
+// SetBit returns a copy of bb with the bit at the given square set to 1.
+func (bb Bitboard) SetBit(sq int) Bitboard {
+	return bb | (1 << sq)
 }
 
-// ClearBit sets the bit at the given square to 0.
-func (bb *Bitboard) ClearBit(sq int) {
-	*bb &= ^(1 << sq)
+// ClearBit returns a copy of bb with the bit at the given square set to 0.
+func (bb Bitboard) ClearBit(sq int) Bitboard {
+	return bb &^ (1 << sq)
 }
 
 // GetBit returns the bit at the given square.
-func (bb *Bitboard) GetBit(sq int) bool {
-	return (*bb>>sq)&1 == 1
+func (bb Bitboard) GetBit(sq int) bool {
+	return bb&(1<<sq) != 0
 }

@@ -13,22 +13,22 @@ func MaskBishopOccupancy(sq int) Bitboard {
 
 	// NE
 	for r, f := tr+1, tf+1; r <= 6 && f <= 6; r, f = r+1, f+1 {
-		occupancy.SetBit(r*8 + f)
+		occupancy = occupancy.SetBit(r*8 + f)
 	}
 
 	// NW
 	for r, f := tr+1, tf-1; r <= 6 && f >= 1; r, f = r+1, f-1 {
-		occupancy.SetBit(r*8 + f)
+		occupancy = occupancy.SetBit(r*8 + f)
 	}
 
 	// SE
 	for r, f := tr-1, tf+1; r >= 1 && f <= 6; r, f = r-1, f+1 {
-		occupancy.SetBit(r*8 + f)
+		occupancy = occupancy.SetBit(r*8 + f)
 	}
 
 	// SW
 	for r, f := tr-1, tf-1; r >= 1 && f >= 1; r, f = r-1, f-1 {
-		occupancy.SetBit(r*8 + f)
+		occupancy = occupancy.SetBit(r*8 + f)
 	}
 
 	return occupancy
@@ -43,7 +43,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 
 	// NE
 	for r, f := tr+1, tf+1; r <= 7 && f <= 7; r, f = r+1, f+1 {
-		attacks.SetBit(r*8 + f)
+		attacks = attacks.SetBit(r*8 + f)
 
 		if blockers.GetBit(r*8 + f) {
 			break
@@ -52,7 +52,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 
 	// NW
 	for r, f := tr+1, tf-1; r <= 7 && f >= 0; r, f = r+1, f-1 {
-		attacks.SetBit(r*8 + f)
+		attacks = attacks.SetBit(r*8 + f)
 
 		if blockers.GetBit(r*8 + f) {
 			break
@@ -61,7 +61,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 
 	// SE
 	for r, f := tr-1, tf+1; r >= 0 && f <= 7; r, f = r-1, f+1 {
-		attacks.SetBit(r*8 + f)
+		attacks = attacks.SetBit(r*8 + f)
 
 		if blockers.GetBit(r*8 + f) {
 			break
@@ -70,7 +70,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 
 	// SW
 	for r, f := tr-1, tf-1; r >= 0 && f >= 0; r, f = r-1, f-1 {
-		attacks.SetBit(r*8 + f)
+		attacks = attacks.SetBit(r*8 + f)
 
 		if blockers.GetBit(r*8 + f) {
 			break

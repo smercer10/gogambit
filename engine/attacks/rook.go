@@ -13,22 +13,22 @@ func MaskRookOccupancy(sq int) Bitboard {
 
 	// N
 	for r := tr + 1; r <= 6; r++ {
-		occupancy.SetBit(r*8 + tf)
+		occupancy = occupancy.SetBit(r*8 + tf)
 	}
 
 	// S
 	for r := tr - 1; r >= 1; r-- {
-		occupancy.SetBit(r*8 + tf)
+		occupancy = occupancy.SetBit(r*8 + tf)
 	}
 
 	// E
 	for f := tf + 1; f <= 6; f++ {
-		occupancy.SetBit(tr*8 + f)
+		occupancy = occupancy.SetBit(tr*8 + f)
 	}
 
 	// W
 	for f := tf - 1; f >= 1; f-- {
-		occupancy.SetBit(tr*8 + f)
+		occupancy = occupancy.SetBit(tr*8 + f)
 	}
 
 	return occupancy

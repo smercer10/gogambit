@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// TestMaskBishopOccupancy tests the MaskBishopOccupancy function.
-func TestMaskBishopOccupancy(t *testing.T) {
+// TestMaskRelevantBishopOccupancy tests the MaskRelevantBishopOccupancy function.
+func TestMaskRelevantBishopOccupancy(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -20,8 +20,8 @@ func TestMaskBishopOccupancy(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskBishopOccupancy(tc.sq); result != tc.expect {
-			t.Errorf("MaskBishopOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
+		if result := MaskRelevantBishopOccupancy(tc.sq); result != tc.expect {
+			t.Errorf("MaskRelevantBishopOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
 				tc.sq, tc.expect, result)
 		}
 	}

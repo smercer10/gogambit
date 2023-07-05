@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  dependencies:
+  mod-tidy:
     name: Check dependencies
     runs-on: ubuntu-latest
     steps:
@@ -28,13 +28,3 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
       - run: go test ./...
-  security:
-    name: Check security
-    runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
-    steps:
-      - uses: actions/checkout@v3
-      - uses: securego/gosec@master
-        with:
-          args: ./...

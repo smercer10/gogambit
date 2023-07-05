@@ -1,4 +1,4 @@
-// Package globals provides variables and constants used throughout the engine.
+// Package globals provides common variables and constants used throughout the engine.
 package globals
 
 // Enum for squares on the board.

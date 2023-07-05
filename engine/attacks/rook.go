@@ -34,6 +34,18 @@ func MaskRookOccupancy(sq int) Bitboard {
 	return occupancy
 }
 
+// RookOccupancyBitCounts is a lookup table with the bit count of each square's rook occupancy mask.
+var RookOccupancyBitCounts = [64]int{
+	12, 11, 11, 11, 11, 11, 11, 12,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	11, 10, 10, 10, 10, 10, 10, 11,
+	12, 11, 11, 11, 11, 11, 11, 12,
+}
+
 // GenRookAttacksOnTheFly generates possible rook attacks for a given square and mask of blockers.
 func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	attacks := Bitboard(0x0)

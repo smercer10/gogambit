@@ -3,15 +3,11 @@ package main
 import (
 	"fmt"
 	a "gogambit/engine/attacks"
-	. "gogambit/engine/globals"
+	. "gogambit/engine/bitboard"
 )
 
 func main() {
-	mask := a.MaskBishopOccupancy(C3)
-
-	for i := 0; i < 10; i++ {
-		occupancy := a.SetOccupancy(mask, i)
-		occupancy.Print()
-		fmt.Println(i)
-	}
+	fmt.Println(a.GenMagicNumCandidate())
+	fmt.Printf("%064b\n", a.GenMagicNumCandidate())
+	Bitboard(a.GenMagicNumCandidate()).Print()
 }

@@ -1,7 +1,10 @@
 // Package attacks provides attack generation utilities.
 package attacks
 
-import . "gogambit/engine/bitboard"
+import (
+	. "gogambit/engine/bitboard"
+	"math/rand"
+)
 
 // SetOccupancy sets the occupancy combination for an attack mask at a given index.
 // This can be used to generate all possible occupancy combinations for the mask.
@@ -19,4 +22,9 @@ func SetOccupancy(mask Bitboard, idx int) Bitboard {
 	}
 
 	return occupancy
+}
+
+// GenMagicNumCandidate generates a random uint64 with a low number of set bits.
+func GenMagicNumCandidate() uint64 {
+	return rand.Uint64() & rand.Uint64() & rand.Uint64()
 }

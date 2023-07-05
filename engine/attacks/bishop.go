@@ -3,9 +3,9 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
-// MaskBishopOccupancy masks the relevant bishop occupancy bits for a given square.
+// MaskRelevantBishopOccupancy masks the relevant bishop occupancy bits for a given square.
 // This forms a key for magic bitboards.
-func MaskBishopOccupancy(sq int) Bitboard {
+func MaskRelevantBishopOccupancy(sq int) Bitboard {
 	occupancy := Bitboard(0x0)
 
 	tr := sq / 8
@@ -34,8 +34,8 @@ func MaskBishopOccupancy(sq int) Bitboard {
 	return occupancy
 }
 
-// BishopOccupancyBitCounts is a lookup table with the bit count of each square's bishop occupancy mask.
-var BishopOccupancyBitCounts = [64]int{
+// BishopRelevantOccupancyBitCounts is a LUT with the bit count of the relevant bishop occupancies for each square.
+var BishopRelevantOccupancyBitCounts = [64]int{
 	6, 5, 5, 5, 5, 5, 5, 6,
 	5, 5, 5, 5, 5, 5, 5, 5,
 	5, 5, 7, 7, 7, 7, 5, 5,

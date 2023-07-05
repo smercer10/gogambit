@@ -3,9 +3,9 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
-// MaskRookOccupancy masks the relevant rook occupancy bits for a given square.
+// MaskRelevantRookOccupancy masks the relevant rook occupancy bits for a given square.
 // This forms a key for magic bitboards.
-func MaskRookOccupancy(sq int) Bitboard {
+func MaskRelevantRookOccupancy(sq int) Bitboard {
 	occupancy := Bitboard(0x0)
 
 	tr := sq / 8
@@ -34,8 +34,8 @@ func MaskRookOccupancy(sq int) Bitboard {
 	return occupancy
 }
 
-// RookOccupancyBitCounts is a lookup table with the bit count of each square's rook occupancy mask.
-var RookOccupancyBitCounts = [64]int{
+// RookRelevantOccupancyBitCounts is a LUT with the bit count of the relevant rook occupancies for each square.
+var RookRelevantOccupancyBitCounts = [64]int{
 	12, 11, 11, 11, 11, 11, 11, 12,
 	11, 10, 10, 10, 10, 10, 10, 11,
 	11, 10, 10, 10, 10, 10, 10, 11,

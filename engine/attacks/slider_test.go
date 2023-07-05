@@ -14,10 +14,10 @@ func TestSetOccupancy(t *testing.T) {
 		idx    int
 		expect Bitboard
 	}{
-		{MaskBishopOccupancy(D4), 2999, 0x400042200},
-		{MaskRookOccupancy(G6), 3965, 0x24040004000},
-		{MaskRookOccupancy(A1), 455, 0xe},
-		{MaskBishopOccupancy(C3), 1, 0x200},
+		{MaskRelevantBishopOccupancy(D4), 2999, 0x400042200},
+		{MaskRelevantRookOccupancy(G6), 3965, 0x24040004000},
+		{MaskRelevantRookOccupancy(A1), 455, 0xe},
+		{MaskRelevantBishopOccupancy(C3), 1, 0x200},
 	}
 
 	for _, tc := range testCases {

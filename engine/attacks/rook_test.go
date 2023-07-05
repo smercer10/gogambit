@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// TestMaskRookOccupancy tests the MaskRookOccupancy function.
-func TestMaskRookOccupancy(t *testing.T) {
+// TestMaskRelevantRookOccupancy tests the MaskRelevantRookOccupancy function.
+func TestMaskRelevantRookOccupancy(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -20,8 +20,8 @@ func TestMaskRookOccupancy(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskRookOccupancy(tc.sq); result != tc.expect {
-			t.Errorf("MaskRookOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
+		if result := MaskRelevantRookOccupancy(tc.sq); result != tc.expect {
+			t.Errorf("MaskRelevantRookOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
 				tc.sq, tc.expect, result)
 		}
 	}

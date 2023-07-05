@@ -34,6 +34,18 @@ func MaskBishopOccupancy(sq int) Bitboard {
 	return occupancy
 }
 
+// BishopOccupancyBitCounts is a lookup table with the bit count of each square's bishop occupancy mask.
+var BishopOccupancyBitCounts = [64]int{
+	6, 5, 5, 5, 5, 5, 5, 6,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 7, 7, 7, 7, 5, 5,
+	5, 5, 7, 9, 9, 7, 5, 5,
+	5, 5, 7, 9, 9, 7, 5, 5,
+	5, 5, 7, 7, 7, 7, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	6, 5, 5, 5, 5, 5, 5, 6,
+}
+
 // GenBishopAttacksOnTheFly generates possible bishop attacks for a given square and mask of blockers.
 func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	attacks := Bitboard(0x0)

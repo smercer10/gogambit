@@ -75,6 +75,12 @@ const (
 	Black
 )
 
+// Enum for bishop or rook.
+const (
+	Rook = iota
+	Bishop
+)
+
 // Squares is an array of board coordinates as strings.
 var Squares = [64]string{
 	"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",

@@ -17,7 +17,7 @@ func MaskPawnAttacks(sq int, side int) Bitboard {
 	if side == White {
 		attacks |= (bb << 7) & NotFileH // Left
 		attacks |= (bb << 9) & NotFileA // Right
-	} else { // side == Black
+	} else { // Black
 		attacks |= (bb >> 7) & NotFileA // Left
 		attacks |= (bb >> 9) & NotFileH // Right
 	}

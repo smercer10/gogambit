@@ -3,6 +3,21 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
+// RookOccupancyMasks is a LUT with the relevant rook occupancy masks for each square.
+var RookOccupancyMasks [64]Bitboard
+
+// RookAttacks is a LUT with the possible rook attacks for each square and magic index.
+var RookAttacks [64][4096]Bitboard
+
+// GetRookAttacks returns possible rook attacks for a given square and board occupancy.
+func GetRookAttacks(sq int, occupancy Bitboard) Bitboard {
+	occupancy &= RookOccupancyMasks[sq]
+	occupancy *= RookMagicNumbers[sq]
+	occupancy >>= 64 - RookRelevantOccupancyBitCounts[sq]
+
+	return RookAttacks[sq][occupancy]
+}
+
 // MaskRelevantRookOccupancy masks the relevant rook occupancy bits for a given square.
 func MaskRelevantRookOccupancy(sq int) Bitboard {
 	mask := Bitboard(0x0)
@@ -45,8 +60,8 @@ var RookRelevantOccupancyBitCounts = [64]int{
 	12, 11, 11, 11, 11, 11, 11, 12,
 }
 
-// GenRookAttacksOnTheFly generates possible rook attacks for a given square and mask of blockers.
-func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
+// GenRookAttacksOnTheFly generates possible rook attacks for a given square and occupancy mask.
+func GenRookAttacksOnTheFly(sq int, occupancy Bitboard) Bitboard {
 	attacks := Bitboard(0x0)
 
 	tr := sq / 8
@@ -56,7 +71,7 @@ func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r := tr + 1; r <= 7; r++ {
 		attacks = attacks.SetBit(r*8 + tf)
 
-		if blockers.GetBit(r*8 + tf) {
+		if occupancy.GetBit(r*8 + tf) {
 			break
 		}
 	}
@@ -65,7 +80,7 @@ func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r := tr - 1; r >= 0; r-- {
 		attacks = attacks.SetBit(r*8 + tf)
 
-		if blockers.GetBit(r*8 + tf) {
+		if occupancy.GetBit(r*8 + tf) {
 			break
 		}
 	}
@@ -74,7 +89,7 @@ func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for f := tf + 1; f <= 7; f++ {
 		attacks = attacks.SetBit(tr*8 + f)
 
-		if blockers.GetBit(tr*8 + f) {
+		if occupancy.GetBit(tr*8 + f) {
 			break
 		}
 	}
@@ -83,7 +98,7 @@ func GenRookAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for f := tf - 1; f >= 0; f-- {
 		attacks = attacks.SetBit(tr*8 + f)
 
-		if blockers.GetBit(tr*8 + f) {
+		if occupancy.GetBit(tr*8 + f) {
 			break
 		}
 	}

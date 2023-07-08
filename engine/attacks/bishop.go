@@ -3,6 +3,21 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
+// BishopOccupancyMasks is a LUT with the relevant bishop occupancy masks for each square.
+var BishopOccupancyMasks [64]Bitboard
+
+// BishopAttacks is a LUT with the possible bishop attacks for each square and magic index.
+var BishopAttacks [64][512]Bitboard
+
+// GetBishopAttacks returns possible bishop attacks for a given square and board occupancy.
+func GetBishopAttacks(sq int, occupancy Bitboard) Bitboard {
+	occupancy &= BishopOccupancyMasks[sq]
+	occupancy *= BishopMagicNumbers[sq]
+	occupancy >>= 64 - BishopRelevantOccupancyBitCounts[sq]
+
+	return BishopAttacks[sq][occupancy]
+}
+
 // MaskRelevantBishopOccupancy masks the relevant bishop occupancy bits for a given square.
 func MaskRelevantBishopOccupancy(sq int) Bitboard {
 	mask := Bitboard(0x0)
@@ -45,8 +60,8 @@ var BishopRelevantOccupancyBitCounts = [64]int{
 	6, 5, 5, 5, 5, 5, 5, 6,
 }
 
-// GenBishopAttacksOnTheFly generates possible bishop attacks for a given square and mask of blockers.
-func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
+// GenBishopAttacksOnTheFly generates possible bishop attacks for a given square and occupancy mask.
+func GenBishopAttacksOnTheFly(sq int, occupancy Bitboard) Bitboard {
 	attacks := Bitboard(0x0)
 
 	tr := sq / 8
@@ -56,7 +71,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r, f := tr+1, tf+1; r <= 7 && f <= 7; r, f = r+1, f+1 {
 		attacks = attacks.SetBit(r*8 + f)
 
-		if blockers.GetBit(r*8 + f) {
+		if occupancy.GetBit(r*8 + f) {
 			break
 		}
 	}
@@ -65,7 +80,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r, f := tr+1, tf-1; r <= 7 && f >= 0; r, f = r+1, f-1 {
 		attacks = attacks.SetBit(r*8 + f)
 
-		if blockers.GetBit(r*8 + f) {
+		if occupancy.GetBit(r*8 + f) {
 			break
 		}
 	}
@@ -74,7 +89,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r, f := tr-1, tf+1; r >= 0 && f <= 7; r, f = r-1, f+1 {
 		attacks = attacks.SetBit(r*8 + f)
 
-		if blockers.GetBit(r*8 + f) {
+		if occupancy.GetBit(r*8 + f) {
 			break
 		}
 	}
@@ -83,7 +98,7 @@ func GenBishopAttacksOnTheFly(sq int, blockers Bitboard) Bitboard {
 	for r, f := tr-1, tf-1; r >= 0 && f >= 0; r, f = r-1, f-1 {
 		attacks = attacks.SetBit(r*8 + f)
 
-		if blockers.GetBit(r*8 + f) {
+		if occupancy.GetBit(r*8 + f) {
 			break
 		}
 	}

@@ -8,8 +8,40 @@ import (
 	"math/rand"
 )
 
+// InitSliderAttacks initializes the necessary LUTs to get bishop or rook attacks.
+func InitSliderAttacks(bishopOrRook int) {
+	for sq := A1; sq <= H8; sq++ {
+		if bishopOrRook == Bishop {
+			// Init bishop relevant occupancy masks LUT
+			BishopOccupancyMasks[sq] = MaskRelevantBishopOccupancy(sq)
+
+			occupancyIndices := 1 << BishopRelevantOccupancyBitCounts[sq]
+
+			for idx := 0; idx < occupancyIndices; idx++ {
+				occupancy := SetOccupancy(BishopOccupancyMasks[sq], BishopRelevantOccupancyBitCounts[sq], idx)
+				magicIndex := int((occupancy * BishopMagicNumbers[sq]) >> (64 - BishopRelevantOccupancyBitCounts[sq]))
+
+				// Init bishop attacks LUT
+				BishopAttacks[sq][magicIndex] = GenBishopAttacksOnTheFly(sq, occupancy)
+			}
+		} else { // Rook
+			// Init rook relevant occupancy masks LUT
+			RookOccupancyMasks[sq] = MaskRelevantRookOccupancy(sq)
+
+			occupancyIndices := 1 << RookRelevantOccupancyBitCounts[sq]
+
+			for idx := 0; idx < occupancyIndices; idx++ {
+				occupancy := SetOccupancy(RookOccupancyMasks[sq], RookRelevantOccupancyBitCounts[sq], idx)
+				magicIndex := int((occupancy * RookMagicNumbers[sq]) >> (64 - RookRelevantOccupancyBitCounts[sq]))
+
+				// Init rook attacks LUT
+				RookAttacks[sq][magicIndex] = GenRookAttacksOnTheFly(sq, occupancy)
+			}
+		}
+	}
+}
+
 // SetOccupancy sets an occupancy combination for the mask of relevant occupancy bits.
-// This can be used to generate all possible occupancy combinations.
 func SetOccupancy(mask Bitboard, maskBitCount int, idx int) Bitboard {
 	occupancy := Bitboard(0x0)
 
@@ -31,16 +63,12 @@ func GenMagicNumCandidate() Bitboard {
 	return Bitboard(rand.Uint64() & rand.Uint64() & rand.Uint64())
 }
 
-// FindMagicNumber finds a magic number for the given piece type at the given square.
+// FindMagicNumber finds a magic number for a bishop or rook at a given square.
 func FindMagicNumber(sq int, bishopOrRook int) Bitboard {
 	var occupancies [4096]Bitboard
-
 	var attacks [4096]Bitboard
-
 	var usedAttacks [4096]Bitboard
-
 	var mask Bitboard
-
 	var relevantBitCount int
 
 	if bishopOrRook == Bishop {
@@ -65,7 +93,7 @@ func FindMagicNumber(sq int, bishopOrRook int) Bitboard {
 	}
 
 	// Test magic numbers
-	for randomCount := 0; randomCount < 1000000000; randomCount++ {
+	for tries := 0; tries < 1000000000; tries++ {
 		magicNumber := GenMagicNumCandidate()
 
 		// Skip inappropriate magic numbers

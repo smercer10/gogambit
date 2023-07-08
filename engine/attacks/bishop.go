@@ -3,21 +3,6 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
-// BishopOccupancyMasks is a LUT with the relevant bishop occupancy masks for each square.
-var BishopOccupancyMasks [64]Bitboard
-
-// BishopAttacks is a LUT with the possible bishop attacks for each square and magic index.
-var BishopAttacks [64][512]Bitboard
-
-// GetBishopAttacks returns possible bishop attacks for a given square and board occupancy.
-func GetBishopAttacks(sq int, occupancy Bitboard) Bitboard {
-	occupancy &= BishopOccupancyMasks[sq]
-	occupancy *= BishopMagicNumbers[sq]
-	occupancy >>= 64 - BishopRelevantOccupancyBitCounts[sq]
-
-	return BishopAttacks[sq][occupancy]
-}
-
 // MaskRelevantBishopOccupancy masks the relevant bishop occupancy bits for a given square.
 func MaskRelevantBishopOccupancy(sq int) Bitboard {
 	mask := Bitboard(0x0)
@@ -172,4 +157,19 @@ var BishopMagicNumbers = [64]Bitboard{
 	0x9210002004618201,
 	0x20000424880a0400,
 	0x48089002820194,
+}
+
+// BishopOccupancyMasks is a LUT with the relevant bishop occupancy masks for each square.
+var BishopOccupancyMasks [64]Bitboard
+
+// BishopAttacks is a LUT with the possible bishop attacks for each square and magic index.
+var BishopAttacks [64][512]Bitboard
+
+// GetBishopAttacks returns possible bishop attacks for a given square and board occupancy.
+func GetBishopAttacks(sq int, occupancy Bitboard) Bitboard {
+	occupancy &= BishopOccupancyMasks[sq]
+	occupancy *= BishopMagicNumbers[sq]
+	occupancy >>= 64 - BishopRelevantOccupancyBitCounts[sq]
+
+	return BishopAttacks[sq][occupancy]
 }

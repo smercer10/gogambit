@@ -8,39 +8,6 @@ import (
 	"math/rand"
 )
 
-// InitSliderAttacks initializes the necessary LUTs to get bishop or rook attacks.
-func InitSliderAttacks(bishopOrRook int) {
-	for sq := A1; sq <= H8; sq++ {
-		if bishopOrRook == Bishop {
-			// Init bishop relevant occupancy masks LUT
-			BishopOccupancyMasks[sq] = MaskRelevantBishopOccupancy(sq)
-
-			occupancyIndices := 1 << BishopRelevantOccupancyBitCounts[sq]
-
-			for idx := 0; idx < occupancyIndices; idx++ {
-				occupancy := SetOccupancy(BishopOccupancyMasks[sq], BishopRelevantOccupancyBitCounts[sq], idx)
-				magicIndex := int((occupancy * BishopMagicNumbers[sq]) >> (64 - BishopRelevantOccupancyBitCounts[sq]))
-
-				// Init bishop attacks LUT
-				BishopAttacks[sq][magicIndex] = GenBishopAttacksOnTheFly(sq, occupancy)
-			}
-		} else { // Rook
-			// Init rook relevant occupancy masks LUT
-			RookOccupancyMasks[sq] = MaskRelevantRookOccupancy(sq)
-
-			occupancyIndices := 1 << RookRelevantOccupancyBitCounts[sq]
-
-			for idx := 0; idx < occupancyIndices; idx++ {
-				occupancy := SetOccupancy(RookOccupancyMasks[sq], RookRelevantOccupancyBitCounts[sq], idx)
-				magicIndex := int((occupancy * RookMagicNumbers[sq]) >> (64 - RookRelevantOccupancyBitCounts[sq]))
-
-				// Init rook attacks LUT
-				RookAttacks[sq][magicIndex] = GenRookAttacksOnTheFly(sq, occupancy)
-			}
-		}
-	}
-}
-
 // SetOccupancy sets an occupancy combination for the mask of relevant occupancy bits.
 func SetOccupancy(mask Bitboard, maskBitCount int, idx int) Bitboard {
 	occupancy := Bitboard(0x0)
@@ -125,4 +92,37 @@ func FindMagicNumber(sq int, bishopOrRook int) Bitboard {
 	fmt.Println("Failed to find magic number")
 
 	return 0x0
+}
+
+// InitSliderAttacks initializes the necessary LUTs to get bishop or rook attacks.
+func InitSliderAttacks(bishopOrRook int) {
+	for sq := A1; sq <= H8; sq++ {
+		if bishopOrRook == Bishop {
+			// Init bishop relevant occupancy masks LUT
+			BishopOccupancyMasks[sq] = MaskRelevantBishopOccupancy(sq)
+
+			occupancyIndices := 1 << BishopRelevantOccupancyBitCounts[sq]
+
+			for idx := 0; idx < occupancyIndices; idx++ {
+				occupancy := SetOccupancy(BishopOccupancyMasks[sq], BishopRelevantOccupancyBitCounts[sq], idx)
+				magicIndex := int((occupancy * BishopMagicNumbers[sq]) >> (64 - BishopRelevantOccupancyBitCounts[sq]))
+
+				// Init bishop attacks LUT
+				BishopAttacks[sq][magicIndex] = GenBishopAttacksOnTheFly(sq, occupancy)
+			}
+		} else { // Rook
+			// Init rook relevant occupancy masks LUT
+			RookOccupancyMasks[sq] = MaskRelevantRookOccupancy(sq)
+
+			occupancyIndices := 1 << RookRelevantOccupancyBitCounts[sq]
+
+			for idx := 0; idx < occupancyIndices; idx++ {
+				occupancy := SetOccupancy(RookOccupancyMasks[sq], RookRelevantOccupancyBitCounts[sq], idx)
+				magicIndex := int((occupancy * RookMagicNumbers[sq]) >> (64 - RookRelevantOccupancyBitCounts[sq]))
+
+				// Init rook attacks LUT
+				RookAttacks[sq][magicIndex] = GenRookAttacksOnTheFly(sq, occupancy)
+			}
+		}
+	}
 }

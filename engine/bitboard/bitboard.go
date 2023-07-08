@@ -72,6 +72,7 @@ const NotFileAB = Bitboard(0xfcfcfcfcfcfcfcfc)
 // NotFileGH is a bitboard with only the G and H files cleared.
 const NotFileGH = Bitboard(0x3f3f3f3f3f3f3f3f)
 
+// PieceBitboards is an array of bitboards for each piece type.
 var PieceBitboards = [12]Bitboard{
 	// White
 	Bitboard(0xff00), // Pawns
@@ -90,6 +91,7 @@ var PieceBitboards = [12]Bitboard{
 	Bitboard(0x800000000000000),  // King
 }
 
+// OccupancyBitboards is an array of occupancy bitboards for white and/or black pieces.
 var OccupancyBitboards = [3]Bitboard{
 	// White pieces
 	Bitboard(0x000000000000ffff), // Occupied squares

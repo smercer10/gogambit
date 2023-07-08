@@ -67,12 +67,14 @@ const (
 	F8
 	G8
 	H8
+	NoSq
 )
 
 // Enum for player sides.
 const (
 	White = iota
 	Black
+	Both
 )
 
 // Enum for bishop or rook.
@@ -91,4 +93,65 @@ var Squares = [64]string{
 	"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
 	"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
 	"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
+}
+
+// SideToMove is the current side to move.
+var SideToMove int = White
+
+// EnPassantSquare is the current en passant square.
+var EnPassantSquare int = NoSq
+
+// CastlingRights is the current castling rights.
+var CastlingRights int = WhiteKingSide | WhiteQueenSide | BlackKingSide | BlackQueenSide
+
+// Enum for castling rights (bit flags).
+const (
+	WhiteKingSide = 1 << iota
+	WhiteQueenSide
+	BlackKingSide
+	BlackQueenSide
+)
+
+// Enum for piece types.
+const (
+	WP = iota
+	WN
+	WB
+	WR
+	WQ
+	WK
+	BP
+	BN
+	BB
+	BR
+	BQ
+	BK
+)
+
+// AsciiPieces is an array of ASCII characters representing pieces.
+var AsciiPieces = [12]byte{
+	'P', 'N', 'B', 'R', 'Q', 'K',
+	'p', 'n', 'b', 'r', 'q', 'k',
+}
+
+// UnicodePieces is an array of Unicode characters representing pieces.
+var UnicodePieces = [12]rune{
+	'♙', '♘', '♗', '♖', '♕', '♔',
+	'♟', '♞', '♝', '♜', '♛', '♚',
+}
+
+// CharToPiece maps ASCII characters to piece types.
+var CharToPiece = map[byte]int{
+	'P': WP,
+	'N': WN,
+	'B': WB,
+	'R': WR,
+	'Q': WQ,
+	'K': WK,
+	'p': BP,
+	'n': BN,
+	'b': BB,
+	'r': BR,
+	'q': BQ,
+	'k': BK,
 }

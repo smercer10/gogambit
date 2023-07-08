@@ -71,3 +71,32 @@ const NotFileAB = Bitboard(0xfcfcfcfcfcfcfcfc)
 
 // NotFileGH is a bitboard with only the G and H files cleared.
 const NotFileGH = Bitboard(0x3f3f3f3f3f3f3f3f)
+
+var PieceBitboards = [12]Bitboard{
+	// White
+	Bitboard(0xff00), // Pawns
+	Bitboard(0x42),   // Knights
+	Bitboard(0x24),   // Bishops
+	Bitboard(0x81),   // Rooks
+	Bitboard(0x8),    // Queen
+	Bitboard(0x10),   // King
+
+	// Black
+	Bitboard(0x00ff000000000000), // Pawns
+	Bitboard(0x4200000000000000), // Knights
+	Bitboard(0x2400000000000000), // Bishops
+	Bitboard(0x8100000000000000), // Rooks
+	Bitboard(0x800000000000000),  // Queen
+	Bitboard(0x800000000000000),  // King
+}
+
+var OccupancyBitboards = [3]Bitboard{
+	// White pieces
+	Bitboard(0x000000000000ffff), // Occupied squares
+
+	// Black pieces
+	Bitboard(0xffff000000000000), // Occupied squares
+
+	// Both pieces
+	Bitboard(0xffff00000000ffff), // Occupied squares
+}

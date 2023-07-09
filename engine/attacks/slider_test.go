@@ -28,3 +28,27 @@ func TestSetOccupancy(t *testing.T) {
 		}
 	}
 }
+
+// TestGetQueenAttacks tests the GetQueenAttacks function.
+func TestGetQueenAttacks(t *testing.T) {
+	testCases := []struct {
+		sq        int
+		occupancy Bitboard
+		expect    Bitboard
+	}{
+		{D4, 0x80000100200, 0x80412a1cf71c0a08},
+		{A1, 0x0, 0x81412111090503fe},
+		{G7, 0x8008200000000000, 0xe0b8e04040404040},
+		{C4, 0x400040000404, 0x4424150e7b0e1520},
+	}
+
+	InitSliderAttacks(Bishop)
+	InitSliderAttacks(Rook)
+
+	for _, tc := range testCases {
+		if result := GetQueenAttacks(tc.sq, tc.occupancy); result != tc.expect {
+			t.Errorf("GetQueenAttacks failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occupancy, tc.expect, result)
+		}
+	}
+}

@@ -9,13 +9,15 @@ import (
 func main() {
 	initAll()
 
-	ParseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1")
+	occupancy := Bitboard(0x0)
 
-	PrintCurrentBoard()
+	occupancy = occupancy.SetBit(C1)
+	occupancy = occupancy.SetBit(C2)
+	occupancy = occupancy.SetBit(G4)
+	occupancy = occupancy.SetBit(G6)
 
-	ParseFEN("r2q1rk1/ppp2ppp/2n1bn2/2b1p3/3pP3/3P1NPP/PPP1NPB1/R1BQ1RK1 w Qq e3 0 9")
-
-	PrintCurrentBoard()
+	occupancy.Print()
+	a.GetQueenAttacks(C4, occupancy).Print()
 }
 
 // initAll initializes all necessary LUTs.

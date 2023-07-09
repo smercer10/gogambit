@@ -126,3 +126,8 @@ func InitSliderAttacks(bishopOrRook int) {
 		}
 	}
 }
+
+// GetQueenAttacks returns possible queen attacks for a given square and board occupancy.
+func GetQueenAttacks(sq int, occupancy Bitboard) Bitboard {
+	return GetBishopAttacks(sq, occupancy) | GetRookAttacks(sq, occupancy)
+}

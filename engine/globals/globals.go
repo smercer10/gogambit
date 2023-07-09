@@ -67,7 +67,7 @@ const (
 	F8
 	G8
 	H8
-	NoSq
+	NA
 )
 
 // Enum for player sides.
@@ -108,7 +108,7 @@ const (
 )
 
 // Squares is an array of board coordinates as strings.
-var Squares = [64]string{
+var Squares = [65]string{
 	"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 	"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
 	"a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
@@ -117,6 +117,13 @@ var Squares = [64]string{
 	"a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
 	"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
 	"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
+	"N/A",
+}
+
+// Sides is an array for player sides.
+var Sides = [2]string{
+	"White",
+	"Black",
 }
 
 // AsciiPieces is an array of ASCII characters representing pieces.
@@ -151,7 +158,27 @@ var CharToPiece = map[byte]int{
 var SideToMove int = White
 
 // EnPassantSquare is the current en passant square.
-var EnPassantSquare int = NoSq
+var EnPassantSquare int = NA
 
 // CastlingRights is the current castling rights (bit flags).
 var CastlingRights int = WhiteKingSide | WhiteQueenSide | BlackKingSide | BlackQueenSide
+
+// CastlingRightsMap maps castling rights to a string representation.
+var CastlingRightsMap = map[int]string{
+	WhiteKingSide | WhiteQueenSide | BlackKingSide | BlackQueenSide: "KQkq",
+	WhiteKingSide | WhiteQueenSide | BlackKingSide:                  "KQk-",
+	WhiteKingSide | WhiteQueenSide | BlackQueenSide:                 "KQ-q",
+	WhiteKingSide | WhiteQueenSide:                                  "KQ--",
+	WhiteKingSide | BlackKingSide | BlackQueenSide:                  "K-kq",
+	WhiteKingSide | BlackKingSide:                                   "K-k-",
+	WhiteKingSide | BlackQueenSide:                                  "K--q",
+	WhiteKingSide:                                                   "K---",
+	WhiteQueenSide | BlackKingSide | BlackQueenSide:                 "-Qkq",
+	WhiteQueenSide | BlackKingSide:                                  "-Qk-",
+	WhiteQueenSide | BlackQueenSide:                                 "-Q-q",
+	WhiteQueenSide:                                                  "-Q--",
+	BlackKingSide | BlackQueenSide:                                  "--kq",
+	BlackKingSide:                                                   "--k-",
+	BlackQueenSide:                                                  "---q",
+	0:                                                               "----",
+}

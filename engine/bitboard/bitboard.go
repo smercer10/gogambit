@@ -3,6 +3,7 @@ package bitboard
 
 import (
 	"fmt"
+	. "gogambit/engine/globals"
 	"math/bits"
 )
 
@@ -88,7 +89,7 @@ var PieceBitboards = [12]Bitboard{
 	Bitboard(0x2400000000000000), // Bishops
 	Bitboard(0x8100000000000000), // Rooks
 	Bitboard(0x800000000000000),  // Queen
-	Bitboard(0x800000000000000),  // King
+	Bitboard(0x1000000000000000), // King
 }
 
 // OccupancyBitboards is an array of occupancy bitboards for white and/or black pieces.
@@ -101,4 +102,39 @@ var OccupancyBitboards = [3]Bitboard{
 
 	// Both pieces
 	Bitboard(0xffff00000000ffff), // Occupied squares
+}
+
+// PrintCurrentBoard prints the current board position and game states.
+func PrintCurrentBoard() {
+	fmt.Println("  +-----------------+")
+
+	for r := 7; r >= 0; r-- {
+		fmt.Printf("%d | ", r+1)
+
+		for f := 0; f < 8; f++ {
+			sq := r*8 + f
+			piece := -1
+
+			for pieceBitboard := WP; pieceBitboard <= BK; pieceBitboard++ {
+				if PieceBitboards[pieceBitboard].GetBit(sq) {
+					piece = pieceBitboard
+					break
+				}
+			}
+
+			if piece == -1 {
+				fmt.Print(". ")
+			} else {
+				// fmt.Printf("%c ", AsciiPieces[piece])
+				fmt.Printf("%c ", UnicodePieces[piece])
+			}
+		}
+		fmt.Println("|")
+	}
+	fmt.Println("  +-----------------+")
+	fmt.Println("    a b c d e f g h")
+
+	fmt.Printf("\nSide to move: %s\n", Sides[SideToMove])
+	fmt.Printf("En passant square: %s\n", Squares[EnPassantSquare])
+	fmt.Printf("Castling rights: %s\n", CastlingRightsMap[CastlingRights])
 }

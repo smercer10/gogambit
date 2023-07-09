@@ -101,3 +101,61 @@ func TestGetLeastSignificantBit(t *testing.T) {
 		}
 	}
 }
+
+// TestParseFEN tests the ParseFEN function.
+func TestParseFEN(t *testing.T) {
+	testCases := []struct {
+		fen             string
+		whiteBitboard   Bitboard
+		blackBitboard   Bitboard
+		sideToMove      int
+		castlingRights  int
+		enPassantSquare int
+	}{
+		{
+			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+			0xffff, 0xffff000000000000, White, 0b1111, NA,
+		},
+		{
+			"4k3/8/8/8/8/8/5PPP/4K3 b - - 0 55",
+			0xe010, 0x1000000000000000, Black, 0b000, NA,
+		},
+		{
+			"rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+			0xc40b3ff, 0xffe7100800000000, Black, 0b1111, NA,
+		},
+		{
+			"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+			0x1000efff, 0xffff000000000000, Black, 0b1111, E3,
+		},
+	}
+
+	for _, tc := range testCases {
+		ParseFEN(tc.fen)
+
+		if SideBitboards[White] != tc.whiteBitboard {
+			t.Errorf("ParseFEN failed: expect whiteBitboard = 0x%x, got 0x%x",
+				tc.whiteBitboard, SideBitboards[White])
+		}
+
+		if SideBitboards[Black] != tc.blackBitboard {
+			t.Errorf("ParseFEN failed: expect blackBitboard = 0x%x, got 0x%x",
+				tc.blackBitboard, SideBitboards[Black])
+		}
+
+		if SideToMove != tc.sideToMove {
+			t.Errorf("ParseFEN failed: expect sideToMove = %s, got %s",
+				Sides[tc.sideToMove], Sides[SideToMove])
+		}
+
+		if CastlingRights != tc.castlingRights {
+			t.Errorf("ParseFEN failed: expect castlingRights = 0b%b, got 0b%b",
+				tc.castlingRights, CastlingRights)
+		}
+
+		if EnPassantSquare != tc.enPassantSquare {
+			t.Errorf("ParseFEN failed: expect enPassantSquare = %s, got %s",
+				Squares[tc.enPassantSquare], Squares[EnPassantSquare])
+		}
+	}
+}

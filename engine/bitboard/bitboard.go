@@ -5,6 +5,7 @@ import (
 	"fmt"
 	. "gogambit/engine/globals"
 	"math/bits"
+	"strings"
 )
 
 // Bitboard is a 64-bit unsigned integer used to represent a chess board.
@@ -73,7 +74,7 @@ const NotFileAB = Bitboard(0xfcfcfcfcfcfcfcfc)
 // NotFileGH is a bitboard with only the G and H files cleared.
 const NotFileGH = Bitboard(0x3f3f3f3f3f3f3f3f)
 
-// PieceBitboards is an array of bitboards for each piece type.
+// PieceBitboards is an array of occupancy bitboards for each piece type.
 var PieceBitboards = [12]Bitboard{
 	// White
 	Bitboard(0xff00), // Pawns
@@ -92,8 +93,8 @@ var PieceBitboards = [12]Bitboard{
 	Bitboard(0x1000000000000000), // King
 }
 
-// OccupancyBitboards is an array of occupancy bitboards for white and/or black pieces.
-var OccupancyBitboards = [3]Bitboard{
+// SideBitboards is an array of occupancy bitboards for white and/or black pieces.
+var SideBitboards = [3]Bitboard{
 	// White pieces
 	Bitboard(0x000000000000ffff), // Occupied squares
 
@@ -137,4 +138,76 @@ func PrintCurrentBoard() {
 	fmt.Printf("\nSide to move: %s\n", Sides[SideToMove])
 	fmt.Printf("En passant square: %s\n", Squares[EnPassantSquare])
 	fmt.Printf("Castling rights: %s\n", CastlingRightsMap[CastlingRights])
+}
+
+// ParseFEN parses a FEN string and sets the board position and game states accordingly.
+func ParseFEN(fen string) {
+	// Reset all bitboards and game states
+	for piece := WP; piece <= BK; piece++ {
+		PieceBitboards[piece] = 0x0
+	}
+
+	for side := White; side <= Both; side++ {
+		SideBitboards[side] = 0x0
+	}
+
+	SideToMove = White
+	EnPassantSquare = NA
+	CastlingRights = 0b0000
+
+	fenSplit := strings.Split(fen, " ")
+
+	// Set piece/side bitboards
+	r := 7
+	f := 0
+
+	for _, char := range fenSplit[0] {
+		if char == '/' {
+			r -= 1
+			f = 0
+		} else if char >= '1' && char <= '8' {
+			f += int(char - '0')
+		} else {
+			piece := CharToPiece[byte(char)]
+			sq := r*8 + f
+
+			PieceBitboards[piece] = PieceBitboards[piece].SetBit(sq)
+			SideBitboards[Both] = SideBitboards[Both].SetBit(sq)
+
+			if piece <= WK {
+				SideBitboards[White] = SideBitboards[White].SetBit(sq)
+			} else {
+				SideBitboards[Black] = SideBitboards[Black].SetBit(sq)
+			}
+			f++
+		}
+	}
+
+	// Set side to move
+	if len(fenSplit) > 1 && fenSplit[1] == "w" {
+		SideToMove = White
+	} else {
+		SideToMove = Black
+	}
+
+	// Set castling rights
+	if len(fenSplit) > 2 && fenSplit[2] != "-" {
+		for _, char := range fenSplit[2] {
+			switch char {
+			case 'K':
+				CastlingRights |= WhiteKingside
+			case 'Q':
+				CastlingRights |= WhiteQueenside
+			case 'k':
+				CastlingRights |= BlackKingside
+			case 'q':
+				CastlingRights |= BlackQueenside
+			}
+		}
+	}
+
+	// Set en passant square
+	if len(fenSplit) > 3 && fenSplit[3] != "-" {
+		EnPassantSquare = CharToSquare[fenSplit[3]]
+	}
 }

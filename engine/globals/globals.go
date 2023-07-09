@@ -101,10 +101,10 @@ const (
 
 // Enum for castling rights (bit flags).
 const (
-	WhiteKingSide = 1 << iota
-	WhiteQueenSide
-	BlackKingSide
-	BlackQueenSide
+	WhiteKingside = 1 << iota
+	WhiteQueenside
+	BlackKingside
+	BlackQueenside
 )
 
 // Squares is an array of board coordinates as strings.
@@ -154,6 +154,18 @@ var CharToPiece = map[byte]int{
 	'k': BK,
 }
 
+// CharToSquare maps string coordinates to the Squares enum.
+var CharToSquare = map[string]int{
+	"a1": A1, "b1": B1, "c1": C1, "d1": D1, "e1": E1, "f1": F1, "g1": G1, "h1": H1,
+	"a2": A2, "b2": B2, "c2": C2, "d2": D2, "e2": E2, "f2": F2, "g2": G2, "h2": H2,
+	"a3": A3, "b3": B3, "c3": C3, "d3": D3, "e3": E3, "f3": F3, "g3": G3, "h3": H3,
+	"a4": A4, "b4": B4, "c4": C4, "d4": D4, "e4": E4, "f4": F4, "g4": G4, "h4": H4,
+	"a5": A5, "b5": B5, "c5": C5, "d5": D5, "e5": E5, "f5": F5, "g5": G5, "h5": H5,
+	"a6": A6, "b6": B6, "c6": C6, "d6": D6, "e6": E6, "f6": F6, "g6": G6, "h6": H6,
+	"a7": A7, "b7": B7, "c7": C7, "d7": D7, "e7": E7, "f7": F7, "g7": G7, "h7": H7,
+	"a8": A8, "b8": B8, "c8": C8, "d8": D8, "e8": E8, "f8": F8, "g8": G8, "h8": H8,
+}
+
 // SideToMove is the current side to move.
 var SideToMove int = White
 
@@ -161,24 +173,24 @@ var SideToMove int = White
 var EnPassantSquare int = NA
 
 // CastlingRights is the current castling rights (bit flags).
-var CastlingRights int = WhiteKingSide | WhiteQueenSide | BlackKingSide | BlackQueenSide
+var CastlingRights int = WhiteKingside | WhiteQueenside | BlackKingside | BlackQueenside
 
-// CastlingRightsMap maps castling rights to a string representation.
+// CastlingRightsMap maps castling rights to an ASCII representation.
 var CastlingRightsMap = map[int]string{
-	WhiteKingSide | WhiteQueenSide | BlackKingSide | BlackQueenSide: "KQkq",
-	WhiteKingSide | WhiteQueenSide | BlackKingSide:                  "KQk-",
-	WhiteKingSide | WhiteQueenSide | BlackQueenSide:                 "KQ-q",
-	WhiteKingSide | WhiteQueenSide:                                  "KQ--",
-	WhiteKingSide | BlackKingSide | BlackQueenSide:                  "K-kq",
-	WhiteKingSide | BlackKingSide:                                   "K-k-",
-	WhiteKingSide | BlackQueenSide:                                  "K--q",
-	WhiteKingSide:                                                   "K---",
-	WhiteQueenSide | BlackKingSide | BlackQueenSide:                 "-Qkq",
-	WhiteQueenSide | BlackKingSide:                                  "-Qk-",
-	WhiteQueenSide | BlackQueenSide:                                 "-Q-q",
-	WhiteQueenSide:                                                  "-Q--",
-	BlackKingSide | BlackQueenSide:                                  "--kq",
-	BlackKingSide:                                                   "--k-",
-	BlackQueenSide:                                                  "---q",
-	0:                                                               "----",
+	WhiteKingside | WhiteQueenside | BlackKingside | BlackQueenside: "KQkq",
+	WhiteKingside | WhiteQueenside | BlackKingside:                  "KQk-",
+	WhiteKingside | WhiteQueenside | BlackQueenside:                 "KQ-q",
+	WhiteKingside | WhiteQueenside:                                  "KQ--",
+	WhiteKingside | BlackKingside | BlackQueenside:                  "K-kq",
+	WhiteKingside | BlackKingside:                                   "K-k-",
+	WhiteKingside | BlackQueenside:                                  "K--q",
+	WhiteKingside:                                                   "K---",
+	WhiteQueenside | BlackKingside | BlackQueenside:                 "-Qkq",
+	WhiteQueenside | BlackKingside:                                  "-Qk-",
+	WhiteQueenside | BlackQueenside:                                 "-Q-q",
+	WhiteQueenside:                                                  "-Q--",
+	BlackKingside | BlackQueenside:                                  "--kq",
+	BlackKingside:                                                   "--k-",
+	BlackQueenside:                                                  "---q",
+	0b000:                                                           "----",
 }

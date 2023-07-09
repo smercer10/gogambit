@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	a "gogambit/engine/attacks"
 	. "gogambit/engine/bitboard"
 	. "gogambit/engine/globals"
@@ -10,11 +9,7 @@ import (
 func main() {
 	initAll()
 
-	PieceBitboards[BR].Print()
-
-	fmt.Printf("Piece: %c\n", AsciiPieces[BR])
-	fmt.Printf("Piece: %c\n", UnicodePieces[BR])
-	fmt.Printf("Piece: %c\n", UnicodePieces[CharToPiece['r']])
+	PrintCurrentBoard()
 }
 
 // initAll initializes all necessary LUTs.

@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// TestMaskRelevantBishopOccupancy tests the MaskRelevantBishopOccupancy function.
-func TestMaskRelevantBishopOccupancy(t *testing.T) {
+// TestMaskRelBishopOcc tests the MaskRelBishopOcc function.
+func TestMaskRelBishopOcc(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -20,19 +20,19 @@ func TestMaskRelevantBishopOccupancy(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskRelevantBishopOccupancy(tc.sq); result != tc.expect {
-			t.Errorf("MaskRelevantBishopOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
+		if result := MaskRelBishopOcc(tc.sq); result != tc.expect {
+			t.Errorf("MaskRelBishopOcc failed for sq = %d: expect 0x%x, got 0x%x",
 				tc.sq, tc.expect, result)
 		}
 	}
 }
 
-// TestGenBishopAttacksOnTheFly tests the GenBishopAttacksOnTheFly function.
-func TestGenBishopAttacksOnTheFly(t *testing.T) {
+// TestGenBishopAttOTF tests the GenBishopAttOTF function.
+func TestGenBishopAttOTF(t *testing.T) {
 	testCases := []struct {
-		sq        int
-		occupancy Bitboard
-		expect    Bitboard
+		sq     int
+		occ    Bitboard
+		expect Bitboard
 	}{
 		{D4, 0x40020000140000, 0x40221400140000},
 		{E3, 0x20020000000, 0x20428002844},
@@ -41,9 +41,9 @@ func TestGenBishopAttacksOnTheFly(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GenBishopAttacksOnTheFly(tc.sq, tc.occupancy); result != tc.expect {
-			t.Errorf("GenBishopAttacksOnTheFly failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occupancy, tc.expect, result)
+		if result := GenBishopAttOTF(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GenBishopAttOTF failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occ, tc.expect, result)
 		}
 	}
 }
@@ -51,9 +51,9 @@ func TestGenBishopAttacksOnTheFly(t *testing.T) {
 // TestGetBishopAttacks tests the GetBishopAttacks function.
 func TestGetBishopAttacks(t *testing.T) {
 	testCases := []struct {
-		sq        int
-		occupancy Bitboard
-		expect    Bitboard
+		sq     int
+		occ    Bitboard
+		expect Bitboard
 	}{
 		{D4, 0x200102000000, 0x1221400142241},
 		{E7, 0x280000100000, 0x2800280000000000},
@@ -66,9 +66,9 @@ func TestGetBishopAttacks(t *testing.T) {
 	InitSliderAttacks(Bishop)
 
 	for _, tc := range testCases {
-		if result := GetBishopAttacks(tc.sq, tc.occupancy); result != tc.expect {
-			t.Errorf("GetBishopAttacks failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occupancy, tc.expect, result)
+		if result := GetBishopAttacks(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetBishopAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occ, tc.expect, result)
 		}
 	}
 }

@@ -9,15 +9,15 @@ import (
 func main() {
 	initAll()
 
-	occupancy := Bitboard(0x0)
+	occ := Bitboard(0x0)
 
-	occupancy = occupancy.SetBit(C1)
-	occupancy = occupancy.SetBit(C2)
-	occupancy = occupancy.SetBit(G4)
-	occupancy = occupancy.SetBit(G6)
+	occ = occ.SetBit(C1)
+	occ = occ.SetBit(C2)
+	occ = occ.SetBit(G4)
+	occ = occ.SetBit(G6)
 
-	occupancy.Print()
-	a.GetQueenAttacks(C4, occupancy).Print()
+	occ.Print()
+	a.GetQueenAttacks(C4, occ).Print()
 }
 
 // initAll initializes all necessary LUTs.

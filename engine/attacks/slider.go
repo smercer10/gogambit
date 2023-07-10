@@ -9,84 +9,88 @@ import (
 )
 
 // SetOccupancy sets an occupancy combination for the mask of relevant occupancy bits.
-func SetOccupancy(mask Bitboard, maskBitCount int, idx int) Bitboard {
-	occupancy := Bitboard(0x0)
+func SetOccupancy(mask Bitboard, bits int, idx int) Bitboard {
+	occ := Bitboard(0x0)
 
-	for count := 0; count < maskBitCount; count++ {
+	for b := 0; b < bits; b++ {
 		sq := mask.GetLeastSignificantBit()
 
 		mask = mask.ClearBit(sq)
 
-		if idx&(1<<count) != 0 {
-			occupancy = occupancy.SetBit(sq)
+		if idx&(1<<b) != 0 {
+			occ = occ.SetBit(sq)
 		}
 	}
 
-	return occupancy
+	return occ
 }
 
-// GenMagicNumCandidate generates a random Bitboard with a small number of set bits.
-func GenMagicNumCandidate() Bitboard {
+// GenMagicNumCand generates a random Bitboard with a small number of set bits.
+func GenMagicNumCand() Bitboard {
 	return Bitboard(rand.Uint64() & rand.Uint64() & rand.Uint64())
 }
 
 // FindMagicNumber finds a magic number for a bishop or rook at a given square.
-func FindMagicNumber(sq int, bishopOrRook int) Bitboard {
-	var occupancies [4096]Bitboard
-	var attacks [4096]Bitboard
-	var usedAttacks [4096]Bitboard
-	var mask Bitboard
-	var relevantBitCount int
+func FindMagicNumber(sq int, piece int) Bitboard {
+	var occ [4096]Bitboard
 
-	if bishopOrRook == Bishop {
-		mask = MaskRelevantBishopOccupancy(sq)
-		relevantBitCount = BishopRelevantOccupancyBitCounts[sq]
+	var att [4096]Bitboard
+
+	var usedAtt [4096]Bitboard
+
+	var mask Bitboard
+
+	var relBits int
+
+	if piece == Bishop {
+		mask = MaskRelBishopOcc(sq)
+		relBits = BishopRelOccBits[sq]
 	} else { // Rook
-		mask = MaskRelevantRookOccupancy(sq)
-		relevantBitCount = RookRelevantOccupancyBitCounts[sq]
+		mask = MaskRelRookOcc(sq)
+		relBits = RookRelOccBits[sq]
 	}
 
-	// Range of unique occupancies (2^relevantBitCount)
-	occupancyIndices := 1 << relevantBitCount
+	// Range of unique occupancies (2^relBits)
+	occIndices := 1 << relBits
 
-	for idx := 0; idx < occupancyIndices; idx++ {
-		occupancies[idx] = SetOccupancy(mask, relevantBitCount, idx)
+	for idx := 0; idx < occIndices; idx++ {
+		occ[idx] = SetOccupancy(mask, relBits, idx)
 
-		if bishopOrRook == Bishop {
-			attacks[idx] = GenBishopAttacksOnTheFly(sq, occupancies[idx])
+		if piece == Bishop {
+			att[idx] = GenBishopAttOTF(sq, occ[idx])
 		} else { // Rook
-			attacks[idx] = GenRookAttacksOnTheFly(sq, occupancies[idx])
+			att[idx] = GenRookAttOTF(sq, occ[idx])
 		}
 	}
 
 	// Test magic numbers
 	for tries := 0; tries < 1000000000; tries++ {
-		magicNumber := GenMagicNumCandidate()
+		magicNum := GenMagicNumCand()
 
 		// Skip inappropriate magic numbers
-		if ((magicNumber * mask) & 0xFF00000000000000).CountBits() < 6 {
+		if ((magicNum * mask) & 0xFF00000000000000).CountBits() < 6 {
 			continue
 		}
 
-		for idx := 0; idx < occupancyIndices; idx++ {
-			usedAttacks[idx] = 0x0
+		for idx := 0; idx < occIndices; idx++ {
+			usedAtt[idx] = 0x0
 		}
 
 		fail := false
 
 		// Test magic index
-		for idx := 0; idx < occupancyIndices && !fail; idx++ {
-			magicIndex := int((occupancies[idx] * magicNumber) >> (64 - relevantBitCount))
+		for idx := 0; idx < occIndices && !fail; idx++ {
+			magicIdx := int((occ[idx] * magicNum) >> (64 - relBits))
 
-			if usedAttacks[magicIndex] == 0x0 {
-				usedAttacks[magicIndex] = attacks[idx]
-			} else if usedAttacks[magicIndex] != attacks[idx] {
+			if usedAtt[magicIdx] == 0x0 {
+				usedAtt[magicIdx] = att[idx]
+			} else if usedAtt[magicIdx] != att[idx] {
 				fail = true
 			}
 		}
 
 		if !fail {
-			return magicNumber
+			return magicNum
 		}
 	}
 	fmt.Println("Failed to find magic number")
@@ -95,39 +99,39 @@ func FindMagicNumber(sq int, bishopOrRook int) Bitboard {
 }
 
 // InitSliderAttacks initializes the necessary LUTs to get bishop or rook attacks.
-func InitSliderAttacks(bishopOrRook int) {
+func InitSliderAttacks(piece int) {
 	for sq := A1; sq <= H8; sq++ {
-		if bishopOrRook == Bishop {
-			// Init bishop relevant occupancy masks LUT
-			BishopOccupancyMasks[sq] = MaskRelevantBishopOccupancy(sq)
+		if piece == Bishop {
+			// Init bishop relevant occ masks LUT
+			BishopOccMasks[sq] = MaskRelBishopOcc(sq)
 
-			occupancyIndices := 1 << BishopRelevantOccupancyBitCounts[sq]
+			occIndices := 1 << BishopRelOccBits[sq]
 
-			for idx := 0; idx < occupancyIndices; idx++ {
-				occupancy := SetOccupancy(BishopOccupancyMasks[sq], BishopRelevantOccupancyBitCounts[sq], idx)
-				magicIndex := int((occupancy * BishopMagicNumbers[sq]) >> (64 - BishopRelevantOccupancyBitCounts[sq]))
+			for idx := 0; idx < occIndices; idx++ {
+				occ := SetOccupancy(BishopOccMasks[sq], BishopRelOccBits[sq], idx)
+				magicIdx := int((occ * BishopMagicNums[sq]) >> (64 - BishopRelOccBits[sq]))
 
 				// Init bishop attacks LUT
-				BishopAttacks[sq][magicIndex] = GenBishopAttacksOnTheFly(sq, occupancy)
+				BishopAttacks[sq][magicIdx] = GenBishopAttOTF(sq, occ)
 			}
 		} else { // Rook
-			// Init rook relevant occupancy masks LUT
-			RookOccupancyMasks[sq] = MaskRelevantRookOccupancy(sq)
+			// Init rook relevant occ masks LUT
+			RookOccMasks[sq] = MaskRelRookOcc(sq)
 
-			occupancyIndices := 1 << RookRelevantOccupancyBitCounts[sq]
+			occIndices := 1 << RookRelOccBits[sq]
 
-			for idx := 0; idx < occupancyIndices; idx++ {
-				occupancy := SetOccupancy(RookOccupancyMasks[sq], RookRelevantOccupancyBitCounts[sq], idx)
-				magicIndex := int((occupancy * RookMagicNumbers[sq]) >> (64 - RookRelevantOccupancyBitCounts[sq]))
+			for idx := 0; idx < occIndices; idx++ {
+				occ := SetOccupancy(RookOccMasks[sq], RookRelOccBits[sq], idx)
+				magicIdx := int((occ * RookMagicNums[sq]) >> (64 - RookRelOccBits[sq]))
 
 				// Init rook attacks LUT
-				RookAttacks[sq][magicIndex] = GenRookAttacksOnTheFly(sq, occupancy)
+				RookAttacks[sq][magicIdx] = GenRookAttOTF(sq, occ)
 			}
 		}
 	}
 }
 
-// GetQueenAttacks returns possible queen attacks for a given square and board occupancy.
-func GetQueenAttacks(sq int, occupancy Bitboard) Bitboard {
-	return GetBishopAttacks(sq, occupancy) | GetRookAttacks(sq, occupancy)
+// GetQueenAttacks returns possible queen attacks for a given square and board occ.
+func GetQueenAttacks(sq int, occ Bitboard) Bitboard {
+	return GetBishopAttacks(sq, occ) | GetRookAttacks(sq, occ)
 }

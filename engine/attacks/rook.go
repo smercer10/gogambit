@@ -3,8 +3,8 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
-// MaskRelevantRookOccupancy masks the relevant rook occupancy bits for a given square.
-func MaskRelevantRookOccupancy(sq int) Bitboard {
+// MaskRelRookOcc masks the relevant rook occupancy bits for a given square.
+func MaskRelRookOcc(sq int) Bitboard {
 	mask := Bitboard(0x0)
 
 	tr := sq / 8
@@ -33,8 +33,8 @@ func MaskRelevantRookOccupancy(sq int) Bitboard {
 	return mask
 }
 
-// RookRelevantOccupancyBitCounts is a LUT with the bit count of the relevant rook occupancies for each square.
-var RookRelevantOccupancyBitCounts = [64]int{
+// RookRelOccBits is a LUT with the bit count of the relevant rook occupancies for each square.
+var RookRelOccBits = [64]int{
 	12, 11, 11, 11, 11, 11, 11, 12,
 	11, 10, 10, 10, 10, 10, 10, 11,
 	11, 10, 10, 10, 10, 10, 10, 11,
@@ -45,54 +45,54 @@ var RookRelevantOccupancyBitCounts = [64]int{
 	12, 11, 11, 11, 11, 11, 11, 12,
 }
 
-// GenRookAttacksOnTheFly generates possible rook attacks for a given square and occupancy mask.
-func GenRookAttacksOnTheFly(sq int, occupancy Bitboard) Bitboard {
-	attacks := Bitboard(0x0)
+// GenRookAttOTF generates possible rook attacks for a given square and occupancy mask.
+func GenRookAttOTF(sq int, occ Bitboard) Bitboard {
+	att := Bitboard(0x0)
 
 	tr := sq / 8
 	tf := sq % 8
 
 	// N
 	for r := tr + 1; r <= 7; r++ {
-		attacks = attacks.SetBit(r*8 + tf)
+		att = att.SetBit(r*8 + tf)
 
-		if occupancy.GetBit(r*8 + tf) {
+		if occ.GetBit(r*8 + tf) {
 			break
 		}
 	}
 
 	// S
 	for r := tr - 1; r >= 0; r-- {
-		attacks = attacks.SetBit(r*8 + tf)
+		att = att.SetBit(r*8 + tf)
 
-		if occupancy.GetBit(r*8 + tf) {
+		if occ.GetBit(r*8 + tf) {
 			break
 		}
 	}
 
 	// E
 	for f := tf + 1; f <= 7; f++ {
-		attacks = attacks.SetBit(tr*8 + f)
+		att = att.SetBit(tr*8 + f)
 
-		if occupancy.GetBit(tr*8 + f) {
+		if occ.GetBit(tr*8 + f) {
 			break
 		}
 	}
 
 	// W
 	for f := tf - 1; f >= 0; f-- {
-		attacks = attacks.SetBit(tr*8 + f)
+		att = att.SetBit(tr*8 + f)
 
-		if occupancy.GetBit(tr*8 + f) {
+		if occ.GetBit(tr*8 + f) {
 			break
 		}
 	}
 
-	return attacks
+	return att
 }
 
-// RookMagicNumbers is a LUT with a rook magic number for each square.
-var RookMagicNumbers = [64]Bitboard{
+// RookMagicNums is a LUT with a rook magic number for each square.
+var RookMagicNums = [64]Bitboard{
 	0x80008040002010,
 	0xc240041000200040,
 	0x2080088020001001,
@@ -159,17 +159,17 @@ var RookMagicNumbers = [64]Bitboard{
 	0x210000408c002102,
 }
 
-// RookOccupancyMasks is a LUT with the relevant rook occupancy masks for each square.
-var RookOccupancyMasks [64]Bitboard
+// RookOccMasks is a LUT with the relevant rook occupancy masks for each square.
+var RookOccMasks [64]Bitboard
 
 // RookAttacks is a LUT with the possible rook attacks for each square and magic index.
 var RookAttacks [64][4096]Bitboard
 
 // GetRookAttacks returns possible rook attacks for a given square and board occupancy.
-func GetRookAttacks(sq int, occupancy Bitboard) Bitboard {
-	occupancy &= RookOccupancyMasks[sq]
-	occupancy *= RookMagicNumbers[sq]
-	occupancy >>= 64 - RookRelevantOccupancyBitCounts[sq]
+func GetRookAttacks(sq int, occ Bitboard) Bitboard {
+	occ &= RookOccMasks[sq]
+	occ *= RookMagicNums[sq]
+	occ >>= 64 - RookRelOccBits[sq]
 
-	return RookAttacks[sq][occupancy]
+	return RookAttacks[sq][occ]
 }

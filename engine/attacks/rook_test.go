@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// TestMaskRelevantRookOccupancy tests the MaskRelevantRookOccupancy function.
-func TestMaskRelevantRookOccupancy(t *testing.T) {
+// TestMaskRelRookOcc tests the MaskRelRookOcc function.
+func TestMaskRelRookOcc(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -20,19 +20,19 @@ func TestMaskRelevantRookOccupancy(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := MaskRelevantRookOccupancy(tc.sq); result != tc.expect {
-			t.Errorf("MaskRelevantRookOccupancy failed for sq = %d: expect 0x%x, got 0x%x",
+		if result := MaskRelRookOcc(tc.sq); result != tc.expect {
+			t.Errorf("MaskRelRookOcc failed for sq = %d: expect 0x%x, got 0x%x",
 				tc.sq, tc.expect, result)
 		}
 	}
 }
 
-// TestGenRookAttacksOnTheFly tests the GenRookAttacksOnTheFly function.
-func TestGenRookAttacksOnTheFly(t *testing.T) {
+// TestGenRookAttOTF tests the GenRookAttOTF function.
+func TestGenRookAttOTF(t *testing.T) {
 	testCases := []struct {
-		sq        int
-		occupancy Bitboard
-		expect    Bitboard
+		sq     int
+		occ    Bitboard
+		expect Bitboard
 	}{
 		{D4, 0x822000000, 0x836080808},
 		{E3, 0x10000000880000, 0x10101010e81010},
@@ -41,9 +41,9 @@ func TestGenRookAttacksOnTheFly(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GenRookAttacksOnTheFly(tc.sq, tc.occupancy); result != tc.expect {
-			t.Errorf("GenRookAttacksOnTheFly failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occupancy, tc.expect, result)
+		if result := GenRookAttOTF(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GenRookAttOTF failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occ, tc.expect, result)
 		}
 	}
 }
@@ -51,9 +51,9 @@ func TestGenRookAttacksOnTheFly(t *testing.T) {
 // TestGetRookAttacks tests the GetRookAttacks function.
 func TestGetRookAttacks(t *testing.T) {
 	testCases := []struct {
-		sq        int
-		occupancy Bitboard
-		expect    Bitboard
+		sq     int
+		occ    Bitboard
+		expect Bitboard
 	}{
 		{D4, 0x82080000, 0x8080808f6080000},
 		{E3, 0x801000080001, 0x1010e81010},
@@ -66,9 +66,9 @@ func TestGetRookAttacks(t *testing.T) {
 	InitSliderAttacks(Rook)
 
 	for _, tc := range testCases {
-		if result := GetRookAttacks(tc.sq, tc.occupancy); result != tc.expect {
-			t.Errorf("GetRookAttacks failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occupancy, tc.expect, result)
+		if result := GetRookAttacks(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetRookAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occ, tc.expect, result)
 		}
 	}
 }

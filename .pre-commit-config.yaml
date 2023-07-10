@@ -32,16 +32,8 @@ repos:
         args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
         name: Add end-of-file newline
-      - id: mixed-line-ending
-        name: Fix mixed line ending
       - id: no-commit-to-branch
         name: Ensure commit isn't to main
-  - repo: https://github.com/crate-ci/typos
-    rev: typos-dict-v0.10.6
-    hooks:
-      - id: typos
-        name: Check for typos
-        args: []
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:

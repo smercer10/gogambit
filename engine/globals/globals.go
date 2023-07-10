@@ -1,7 +1,7 @@
 // Package globals provides common variables and constants used throughout the engine.
 package globals
 
-// Enum for squares on the board.
+// Enum for board squares.
 const (
 	A1 = iota
 	B1
@@ -101,10 +101,10 @@ const (
 
 // Enum for castling rights (bit flags).
 const (
-	WhiteKingside = 1 << iota
-	WhiteQueenside
-	BlackKingside
-	BlackQueenside
+	WKS = 1 << iota
+	WQS
+	BKS
+	BQS
 )
 
 // Squares is an array of board coordinates as strings.
@@ -120,7 +120,7 @@ var Squares = [65]string{
 	"N/A",
 }
 
-// Sides is an array for player sides.
+// Sides is an array of player sides as strings.
 var Sides = [2]string{
 	"White",
 	"Black",
@@ -138,7 +138,7 @@ var UnicodePieces = [12]rune{
 	'♟', '♞', '♝', '♜', '♛', '♚',
 }
 
-// CharToPiece maps ASCII characters to piece types.
+// CharToPiece maps ASCII piece types to their enum values.
 var CharToPiece = map[byte]int{
 	'P': WP,
 	'N': WN,
@@ -154,7 +154,7 @@ var CharToPiece = map[byte]int{
 	'k': BK,
 }
 
-// CharToSquare maps string coordinates to the Squares enum.
+// CharToSquare maps string squares to their enum values.
 var CharToSquare = map[string]int{
 	"a1": A1, "b1": B1, "c1": C1, "d1": D1, "e1": E1, "f1": F1, "g1": G1, "h1": H1,
 	"a2": A2, "b2": B2, "c2": C2, "d2": D2, "e2": E2, "f2": F2, "g2": G2, "h2": H2,
@@ -169,28 +169,28 @@ var CharToSquare = map[string]int{
 // SideToMove is the current side to move.
 var SideToMove int = White
 
-// EnPassantSquare is the current en passant square.
+// EnPassantSquare is the current en passant square (if any).
 var EnPassantSquare int = NA
 
-// CastlingRights is the current castling rights (bit flags).
-var CastlingRights int = WhiteKingside | WhiteQueenside | BlackKingside | BlackQueenside
+// CastlingRights is the current castling rights.
+var CastlingRights int = WKS | WQS | BKS | BQS
 
 // CastlingRightsMap maps castling rights to an ASCII representation.
 var CastlingRightsMap = map[int]string{
-	WhiteKingside | WhiteQueenside | BlackKingside | BlackQueenside: "KQkq",
-	WhiteKingside | WhiteQueenside | BlackKingside:                  "KQk-",
-	WhiteKingside | WhiteQueenside | BlackQueenside:                 "KQ-q",
-	WhiteKingside | WhiteQueenside:                                  "KQ--",
-	WhiteKingside | BlackKingside | BlackQueenside:                  "K-kq",
-	WhiteKingside | BlackKingside:                                   "K-k-",
-	WhiteKingside | BlackQueenside:                                  "K--q",
-	WhiteKingside:                                                   "K---",
-	WhiteQueenside | BlackKingside | BlackQueenside:                 "-Qkq",
-	WhiteQueenside | BlackKingside:                                  "-Qk-",
-	WhiteQueenside | BlackQueenside:                                 "-Q-q",
-	WhiteQueenside:                                                  "-Q--",
-	BlackKingside | BlackQueenside:                                  "--kq",
-	BlackKingside:                                                   "--k-",
-	BlackQueenside:                                                  "---q",
-	0b000:                                                           "----",
+	WKS | WQS | BKS | BQS: "KQkq",
+	WKS | WQS | BKS:       "KQk-",
+	WKS | WQS | BQS:       "KQ-q",
+	WKS | WQS:             "KQ--",
+	WKS | BKS | BQS:       "K-kq",
+	WKS | BKS:             "K-k-",
+	WKS | BQS:             "K--q",
+	WKS:                   "K---",
+	WQS | BKS | BQS:       "-Qkq",
+	WQS | BKS:             "-Qk-",
+	WQS | BQS:             "-Q-q",
+	WQS:                   "-Q--",
+	BKS | BQS:             "--kq",
+	BKS:                   "--k-",
+	BQS:                   "---q",
+	0b000:                 "----",
 }

@@ -3,8 +3,8 @@ package attacks
 
 import . "gogambit/engine/bitboard"
 
-// MaskRelevantBishopOccupancy masks the relevant bishop occupancy bits for a given square.
-func MaskRelevantBishopOccupancy(sq int) Bitboard {
+// MaskRelBishopOcc masks the relevant bishop occupancy bits for a given square.
+func MaskRelBishopOcc(sq int) Bitboard {
 	mask := Bitboard(0x0)
 
 	tr := sq / 8
@@ -33,8 +33,8 @@ func MaskRelevantBishopOccupancy(sq int) Bitboard {
 	return mask
 }
 
-// BishopRelevantOccupancyBitCounts is a LUT with the bit count of the relevant bishop occupancies for each square.
-var BishopRelevantOccupancyBitCounts = [64]int{
+// BishopRelOccBits is a LUT with the bit count of the relevant bishop occupancies for each square.
+var BishopRelOccBits = [64]int{
 	6, 5, 5, 5, 5, 5, 5, 6,
 	5, 5, 5, 5, 5, 5, 5, 5,
 	5, 5, 7, 7, 7, 7, 5, 5,
@@ -45,54 +45,54 @@ var BishopRelevantOccupancyBitCounts = [64]int{
 	6, 5, 5, 5, 5, 5, 5, 6,
 }
 
-// GenBishopAttacksOnTheFly generates possible bishop attacks for a given square and occupancy mask.
-func GenBishopAttacksOnTheFly(sq int, occupancy Bitboard) Bitboard {
-	attacks := Bitboard(0x0)
+// GenBishopAttOTF generates possible bishop attacks for a given square and occupancy mask.
+func GenBishopAttOTF(sq int, occ Bitboard) Bitboard {
+	att := Bitboard(0x0)
 
 	tr := sq / 8
 	tf := sq % 8
 
 	// NE
 	for r, f := tr+1, tf+1; r <= 7 && f <= 7; r, f = r+1, f+1 {
-		attacks = attacks.SetBit(r*8 + f)
+		att = att.SetBit(r*8 + f)
 
-		if occupancy.GetBit(r*8 + f) {
+		if occ.GetBit(r*8 + f) {
 			break
 		}
 	}
 
 	// NW
 	for r, f := tr+1, tf-1; r <= 7 && f >= 0; r, f = r+1, f-1 {
-		attacks = attacks.SetBit(r*8 + f)
+		att = att.SetBit(r*8 + f)
 
-		if occupancy.GetBit(r*8 + f) {
+		if occ.GetBit(r*8 + f) {
 			break
 		}
 	}
 
 	// SE
 	for r, f := tr-1, tf+1; r >= 0 && f <= 7; r, f = r-1, f+1 {
-		attacks = attacks.SetBit(r*8 + f)
+		att = att.SetBit(r*8 + f)
 
-		if occupancy.GetBit(r*8 + f) {
+		if occ.GetBit(r*8 + f) {
 			break
 		}
 	}
 
 	// SW
 	for r, f := tr-1, tf-1; r >= 0 && f >= 0; r, f = r-1, f-1 {
-		attacks = attacks.SetBit(r*8 + f)
+		att = att.SetBit(r*8 + f)
 
-		if occupancy.GetBit(r*8 + f) {
+		if occ.GetBit(r*8 + f) {
 			break
 		}
 	}
 
-	return attacks
+	return att
 }
 
-// BishopMagicNumbers is a LUT with a bishop magic number for each square.
-var BishopMagicNumbers = [64]Bitboard{
+// BishopMagicNums is a LUT with a bishop magic number for each square.
+var BishopMagicNums = [64]Bitboard{
 	0xb008011000811102,
 	0x888210800810400,
 	0x10208081041870,
@@ -159,17 +159,17 @@ var BishopMagicNumbers = [64]Bitboard{
 	0x48089002820194,
 }
 
-// BishopOccupancyMasks is a LUT with the relevant bishop occupancy masks for each square.
-var BishopOccupancyMasks [64]Bitboard
+// BishopOccMasks is a LUT with the relevant bishop occupancy masks for each square.
+var BishopOccMasks [64]Bitboard
 
 // BishopAttacks is a LUT with the possible bishop attacks for each square and magic index.
 var BishopAttacks [64][512]Bitboard
 
 // GetBishopAttacks returns possible bishop attacks for a given square and board occupancy.
-func GetBishopAttacks(sq int, occupancy Bitboard) Bitboard {
-	occupancy &= BishopOccupancyMasks[sq]
-	occupancy *= BishopMagicNumbers[sq]
-	occupancy >>= 64 - BishopRelevantOccupancyBitCounts[sq]
+func GetBishopAttacks(sq int, occ Bitboard) Bitboard {
+	occ &= BishopOccMasks[sq]
+	occ *= BishopMagicNums[sq]
+	occ >>= 64 - BishopRelOccBits[sq]
 
-	return BishopAttacks[sq][occupancy]
+	return BishopAttacks[sq][occ]
 }

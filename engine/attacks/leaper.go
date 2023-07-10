@@ -74,8 +74,8 @@ var KnightAttacks [64]Bitboard
 // KingAttacks is a LUT for king attacks.
 var KingAttacks [64]Bitboard
 
-// InitLeaperAttacks initializes the lookup tables for leaper piece attacks.
-func InitLeaperAttacks() {
+// InitLeaperAtt initializes the lookup tables for leaper piece attacks.
+func InitLeaperAtt() {
 	for sq := A1; sq <= H8; sq++ {
 		PawnAttacks[White][sq] = GenPawnAttacks(sq, White)
 		PawnAttacks[Black][sq] = GenPawnAttacks(sq, Black)

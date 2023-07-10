@@ -56,7 +56,7 @@ func GenRookAttOTF(sq int, occ Bitboard) Bitboard {
 	for r := tr + 1; r <= 7; r++ {
 		att = att.SetBit(r*8 + tf)
 
-		if occ.GetBit(r*8 + tf) {
+		if occ.IsSet(r*8 + tf) {
 			break
 		}
 	}
@@ -65,7 +65,7 @@ func GenRookAttOTF(sq int, occ Bitboard) Bitboard {
 	for r := tr - 1; r >= 0; r-- {
 		att = att.SetBit(r*8 + tf)
 
-		if occ.GetBit(r*8 + tf) {
+		if occ.IsSet(r*8 + tf) {
 			break
 		}
 	}
@@ -74,7 +74,7 @@ func GenRookAttOTF(sq int, occ Bitboard) Bitboard {
 	for f := tf + 1; f <= 7; f++ {
 		att = att.SetBit(tr*8 + f)
 
-		if occ.GetBit(tr*8 + f) {
+		if occ.IsSet(tr*8 + f) {
 			break
 		}
 	}
@@ -83,7 +83,7 @@ func GenRookAttOTF(sq int, occ Bitboard) Bitboard {
 	for f := tf - 1; f >= 0; f-- {
 		att = att.SetBit(tr*8 + f)
 
-		if occ.GetBit(tr*8 + f) {
+		if occ.IsSet(tr*8 + f) {
 			break
 		}
 	}

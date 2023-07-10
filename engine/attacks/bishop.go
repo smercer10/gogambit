@@ -56,7 +56,7 @@ func GenBishopAttOTF(sq int, occ Bitboard) Bitboard {
 	for r, f := tr+1, tf+1; r <= 7 && f <= 7; r, f = r+1, f+1 {
 		att = att.SetBit(r*8 + f)
 
-		if occ.GetBit(r*8 + f) {
+		if occ.IsSet(r*8 + f) {
 			break
 		}
 	}
@@ -65,7 +65,7 @@ func GenBishopAttOTF(sq int, occ Bitboard) Bitboard {
 	for r, f := tr+1, tf-1; r <= 7 && f >= 0; r, f = r+1, f-1 {
 		att = att.SetBit(r*8 + f)
 
-		if occ.GetBit(r*8 + f) {
+		if occ.IsSet(r*8 + f) {
 			break
 		}
 	}
@@ -74,7 +74,7 @@ func GenBishopAttOTF(sq int, occ Bitboard) Bitboard {
 	for r, f := tr-1, tf+1; r >= 0 && f <= 7; r, f = r-1, f+1 {
 		att = att.SetBit(r*8 + f)
 
-		if occ.GetBit(r*8 + f) {
+		if occ.IsSet(r*8 + f) {
 			break
 		}
 	}
@@ -83,7 +83,7 @@ func GenBishopAttOTF(sq int, occ Bitboard) Bitboard {
 	for r, f := tr-1, tf-1; r >= 0 && f >= 0; r, f = r-1, f-1 {
 		att = att.SetBit(r*8 + f)
 
-		if occ.GetBit(r*8 + f) {
+		if occ.IsSet(r*8 + f) {
 			break
 		}
 	}

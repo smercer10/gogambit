@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// TestSetBit tests the SetBit function.
+// TestSetBit tests the SetBit method.
 func TestSetBit(t *testing.T) {
 	bb := Bitboard(0x0)
 
@@ -23,7 +23,7 @@ func TestSetBit(t *testing.T) {
 	}
 }
 
-// TestClearBit tests the ClearBit function.
+// TestClearBit tests the ClearBit method.
 func TestClearBit(t *testing.T) {
 	bb := Bitboard(0x8000000000000001)
 
@@ -40,8 +40,8 @@ func TestClearBit(t *testing.T) {
 	}
 }
 
-// TestGetBit tests the GetBit function.
-func TestGetBit(t *testing.T) {
+// TestIsSet tests the IsSet method.
+func TestIsSet(t *testing.T) {
 	bb := Bitboard(0x8000000000000001)
 
 	testCases := []struct {
@@ -55,14 +55,14 @@ func TestGetBit(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := bb.GetBit(tc.sq); result != tc.expect {
-			t.Errorf("GetBit failed for bb = 0x%x, sq = %d: expect %t, got %t",
-				bb, tc.sq, tc.expect, result)
+		if result := bb.IsSet(tc.sq); result != tc.expect {
+			t.Errorf("IsSet failed for bb = 0x%x, sq = %s: expect %t, got %t",
+				bb, Squares[tc.sq], tc.expect, result)
 		}
 	}
 }
 
-// TestCountBits tests the CountBits function.
+// TestCountBits tests the CountBits method.
 func TestCountBits(t *testing.T) {
 	testCases := []struct {
 		bb     Bitboard
@@ -82,22 +82,22 @@ func TestCountBits(t *testing.T) {
 	}
 }
 
-// TestGetLeastSignificantBit tests the GetLeastSignificantBit function.
+// TestGetLeastSignificantBit tests the GetLeastSignificantBit method.
 func TestGetLeastSignificantBit(t *testing.T) {
 	testCases := []struct {
 		bb     Bitboard
 		expect int
 	}{
 		{0x0, -1},
-		{0x1, 0},
-		{0x80000000800002, 1},
-		{0x880000000000000, 55},
+		{0x1, A1},
+		{0x80000000800002, B1},
+		{0x880000000000000, H7},
 	}
 
 	for _, tc := range testCases {
 		if result := tc.bb.GetLeastSignificantBit(); result != tc.expect {
-			t.Errorf("GetLeastSignificantBit failed for bb = 0x%x: expect %d, got %d",
-				tc.bb, tc.expect, result)
+			t.Errorf("GetLeastSignificantBit failed for bb = 0x%x: expect %s, got %s",
+				tc.bb, Squares[tc.expect], Squares[result])
 		}
 	}
 }
@@ -133,14 +133,14 @@ func TestParseFEN(t *testing.T) {
 	for _, tc := range testCases {
 		ParseFEN(tc.fen)
 
-		if SideBitboards[White] != tc.whiteOcc {
+		if SideOcc[White] != tc.whiteOcc {
 			t.Errorf("ParseFEN failed: expect whiteOcc = 0x%x, got 0x%x",
-				tc.whiteOcc, SideBitboards[White])
+				tc.whiteOcc, SideOcc[White])
 		}
 
-		if SideBitboards[Black] != tc.blackOcc {
+		if SideOcc[Black] != tc.blackOcc {
 			t.Errorf("ParseFEN failed: expect blackOcc = 0x%x, got 0x%x",
-				tc.blackOcc, SideBitboards[Black])
+				tc.blackOcc, SideOcc[Black])
 		}
 
 		if SideToMove != tc.sideToMove {
@@ -153,9 +153,9 @@ func TestParseFEN(t *testing.T) {
 				tc.castlingRights, CastlingRights)
 		}
 
-		if EnPassantSquare != tc.enPassantSquare {
+		if EnPassantSq != tc.enPassantSquare {
 			t.Errorf("ParseFEN failed: expect enPassantSquare = %s, got %s",
-				Squares[tc.enPassantSquare], Squares[EnPassantSquare])
+				Squares[tc.enPassantSquare], Squares[EnPassantSq])
 		}
 	}
 }

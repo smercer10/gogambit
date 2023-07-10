@@ -1,28 +1,26 @@
 package main
 
 import (
+	"fmt"
 	a "gogambit/engine/attacks"
 	. "gogambit/engine/bitboard"
 	. "gogambit/engine/globals"
+	m "gogambit/engine/moves"
 )
 
 func main() {
 	initAll()
 
-	occ := Bitboard(0x0)
+	ParseFEN("r3k1nr/1bq2ppp/p2p4/1p1P1Q2/1P6/1B4P1/4PPBP/R5K1 b kq - 0 27")
 
-	occ = occ.SetBit(C1)
-	occ = occ.SetBit(C2)
-	occ = occ.SetBit(G4)
-	occ = occ.SetBit(G6)
+	PrintCurrentBoard()
 
-	occ.Print()
-	a.GetQueenAttacks(C4, occ).Print()
+	fmt.Printf("%t", m.IsAttacked(C7, White))
 }
 
 // initAll initializes all necessary LUTs.
 func initAll() {
-	a.InitLeaperAttacks()
-	a.InitSliderAttacks(Bishop)
-	a.InitSliderAttacks(Rook)
+	a.InitLeaperAtt()
+	a.InitSliderAtt(Bishop)
+	a.InitSliderAtt(Rook)
 }

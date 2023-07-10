@@ -106,8 +106,8 @@ func TestGetLeastSignificantBit(t *testing.T) {
 func TestParseFEN(t *testing.T) {
 	testCases := []struct {
 		fen             string
-		whiteBitboard   Bitboard
-		blackBitboard   Bitboard
+		whiteOcc        Bitboard
+		blackOcc        Bitboard
 		sideToMove      int
 		castlingRights  int
 		enPassantSquare int
@@ -133,14 +133,14 @@ func TestParseFEN(t *testing.T) {
 	for _, tc := range testCases {
 		ParseFEN(tc.fen)
 
-		if SideBitboards[White] != tc.whiteBitboard {
-			t.Errorf("ParseFEN failed: expect whiteBitboard = 0x%x, got 0x%x",
-				tc.whiteBitboard, SideBitboards[White])
+		if SideBitboards[White] != tc.whiteOcc {
+			t.Errorf("ParseFEN failed: expect whiteOcc = 0x%x, got 0x%x",
+				tc.whiteOcc, SideBitboards[White])
 		}
 
-		if SideBitboards[Black] != tc.blackBitboard {
-			t.Errorf("ParseFEN failed: expect blackBitboard = 0x%x, got 0x%x",
-				tc.blackBitboard, SideBitboards[Black])
+		if SideBitboards[Black] != tc.blackOcc {
+			t.Errorf("ParseFEN failed: expect blackOcc = 0x%x, got 0x%x",
+				tc.blackOcc, SideBitboards[Black])
 		}
 
 		if SideToMove != tc.sideToMove {

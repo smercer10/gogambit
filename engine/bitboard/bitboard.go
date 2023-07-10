@@ -43,7 +43,7 @@ func (bb Bitboard) ClearBit(sq int) Bitboard {
 	return bb &^ (1 << sq)
 }
 
-// GetBit returns the bit at the given square.
+// GetBit checks if the bit at the given square is set to 1.
 func (bb Bitboard) GetBit(sq int) bool {
 	return bb&(1<<sq) != 0
 }
@@ -95,14 +95,14 @@ var PieceBitboards = [12]Bitboard{
 
 // SideBitboards is an array of occupancy bitboards for white and/or black pieces.
 var SideBitboards = [3]Bitboard{
-	// White pieces
-	Bitboard(0x000000000000ffff), // Occupied squares
+	// White
+	Bitboard(0x000000000000ffff),
 
-	// Black pieces
-	Bitboard(0xffff000000000000), // Occupied squares
+	// Black
+	Bitboard(0xffff000000000000),
 
-	// Both pieces
-	Bitboard(0xffff00000000ffff), // Occupied squares
+	// Both
+	Bitboard(0xffff00000000ffff),
 }
 
 // PrintCurrentBoard prints the current board position and game states.
@@ -116,9 +116,9 @@ func PrintCurrentBoard() {
 			sq := r*8 + f
 			piece := -1
 
-			for pieceBitboard := WP; pieceBitboard <= BK; pieceBitboard++ {
-				if PieceBitboards[pieceBitboard].GetBit(sq) {
-					piece = pieceBitboard
+			for p := WP; p <= BK; p++ {
+				if PieceBitboards[p].GetBit(sq) {
+					piece = p
 					break
 				}
 			}
@@ -143,12 +143,12 @@ func PrintCurrentBoard() {
 // ParseFEN parses a FEN string and sets the board position and game states accordingly.
 func ParseFEN(fen string) {
 	// Reset all bitboards and game states
-	for piece := WP; piece <= BK; piece++ {
-		PieceBitboards[piece] = 0x0
+	for p := WP; p <= BK; p++ {
+		PieceBitboards[p] = 0x0
 	}
 
-	for side := White; side <= Both; side++ {
-		SideBitboards[side] = 0x0
+	for s := White; s <= Both; s++ {
+		SideBitboards[s] = 0x0
 	}
 
 	SideToMove = White
@@ -195,13 +195,13 @@ func ParseFEN(fen string) {
 		for _, char := range fenSplit[2] {
 			switch char {
 			case 'K':
-				CastlingRights |= WhiteKingside
+				CastlingRights |= WKS
 			case 'Q':
-				CastlingRights |= WhiteQueenside
+				CastlingRights |= WQS
 			case 'k':
-				CastlingRights |= BlackKingside
+				CastlingRights |= BKS
 			case 'q':
-				CastlingRights |= BlackQueenside
+				CastlingRights |= BQS
 			}
 		}
 	}

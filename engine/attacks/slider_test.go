@@ -10,21 +10,21 @@ import (
 // TestSetOccupancy tests the SetOccupancy function.
 func TestSetOccupancy(t *testing.T) {
 	testCases := []struct {
-		mask         Bitboard
-		maskBitCount int
-		idx          int
-		expect       Bitboard
+		mask   Bitboard
+		bits   int
+		idx    int
+		expect Bitboard
 	}{
-		{MaskRelevantBishopOccupancy(A1), BishopRelevantOccupancyBitCounts[A1], 3, 0x40200},
-		{MaskRelevantRookOccupancy(G6), RookRelevantOccupancyBitCounts[G6], 3965, 0x402e4040004000},
-		{MaskRelevantRookOccupancy(D2), RookRelevantOccupancyBitCounts[D2], 455, 0x80808001600},
-		{MaskRelevantBishopOccupancy(C3), BishopRelevantOccupancyBitCounts[C3], 1, 0x200},
+		{MaskRelBishopOcc(A1), BishopRelOccBits[A1], 3, 0x40200},
+		{MaskRelRookOcc(G6), RookRelOccBits[G6], 3965, 0x402e4040004000},
+		{MaskRelRookOcc(D2), RookRelOccBits[D2], 455, 0x80808001600},
+		{MaskRelBishopOcc(C3), BishopRelOccBits[C3], 1, 0x200},
 	}
 
 	for _, tc := range testCases {
-		if result := SetOccupancy(tc.mask, tc.maskBitCount, tc.idx); result != tc.expect {
-			t.Errorf("SetOccupancy failed for mask = 0x%x, maskBitCount = %d, idx = %d: expect 0x%x, got 0x%x",
-				tc.mask, tc.maskBitCount, tc.idx, tc.expect, result)
+		if result := SetOccupancy(tc.mask, tc.bits, tc.idx); result != tc.expect {
+			t.Errorf("SetOccupancy failed for mask = 0x%x, bits = %d, idx = %d: expect 0x%x, got 0x%x",
+				tc.mask, tc.bits, tc.idx, tc.expect, result)
 		}
 	}
 }
@@ -32,9 +32,9 @@ func TestSetOccupancy(t *testing.T) {
 // TestGetQueenAttacks tests the GetQueenAttacks function.
 func TestGetQueenAttacks(t *testing.T) {
 	testCases := []struct {
-		sq        int
-		occupancy Bitboard
-		expect    Bitboard
+		sq     int
+		occ    Bitboard
+		expect Bitboard
 	}{
 		{D4, 0x80000100200, 0x80412a1cf71c0a08},
 		{A1, 0x0, 0x81412111090503fe},
@@ -46,9 +46,9 @@ func TestGetQueenAttacks(t *testing.T) {
 	InitSliderAttacks(Rook)
 
 	for _, tc := range testCases {
-		if result := GetQueenAttacks(tc.sq, tc.occupancy); result != tc.expect {
-			t.Errorf("GetQueenAttacks failed for sq = %d, occupancy = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occupancy, tc.expect, result)
+		if result := GetQueenAttacks(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetQueenAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
+				tc.sq, tc.occ, tc.expect, result)
 		}
 	}
 }

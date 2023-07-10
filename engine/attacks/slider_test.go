@@ -42,13 +42,13 @@ func TestGetQueenAttacks(t *testing.T) {
 		{C4, 0x400040000404, 0x4424150e7b0e1520},
 	}
 
-	InitSliderAttacks(Bishop)
-	InitSliderAttacks(Rook)
+	InitSliderAtt(Bishop)
+	InitSliderAtt(Rook)
 
 	for _, tc := range testCases {
 		if result := GetQueenAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetQueenAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occ, tc.expect, result)
+			t.Errorf("GetQueenAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
 }

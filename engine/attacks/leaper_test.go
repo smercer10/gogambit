@@ -22,8 +22,8 @@ func TestGenPawnAttacks(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := GenPawnAttacks(tc.sq, tc.side); result != tc.expect {
-			t.Errorf("GenPawnAttacks failed for sq = %d, side = %d: expect 0x%x, got 0x%x",
-				tc.sq, tc.side, tc.expect, result)
+			t.Errorf("GenPawnAttacks failed for sq = %s, side = %s: expect 0x%x, got 0x%x",
+				Squares[tc.sq], Sides[tc.side], tc.expect, result)
 		}
 	}
 }
@@ -42,8 +42,8 @@ func TestGenKnightAttacks(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := GenKnightAttacks(tc.sq); result != tc.expect {
-			t.Errorf("GenKnightAttacks failed for sq = %d: expect 0x%x, got 0x%x",
-				tc.sq, tc.expect, result)
+			t.Errorf("GenKnightAttacks failed for sq = %s: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.expect, result)
 		}
 	}
 }
@@ -62,8 +62,8 @@ func TestGenKingAttacks(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := GenKingAttacks(tc.sq); result != tc.expect {
-			t.Errorf("GenKingAttacks failed for sq = %d: expect 0x%x, got 0x%x",
-				tc.sq, tc.expect, result)
+			t.Errorf("GenKingAttacks failed for sq = %s: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.expect, result)
 		}
 	}
 }

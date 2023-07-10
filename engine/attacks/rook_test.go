@@ -21,8 +21,8 @@ func TestMaskRelRookOcc(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := MaskRelRookOcc(tc.sq); result != tc.expect {
-			t.Errorf("MaskRelRookOcc failed for sq = %d: expect 0x%x, got 0x%x",
-				tc.sq, tc.expect, result)
+			t.Errorf("MaskRelRookOcc failed for sq = %s: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.expect, result)
 		}
 	}
 }
@@ -42,8 +42,8 @@ func TestGenRookAttOTF(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := GenRookAttOTF(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GenRookAttOTF failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occ, tc.expect, result)
+			t.Errorf("GenRookAttOTF failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
 }
@@ -63,12 +63,12 @@ func TestGetRookAttacks(t *testing.T) {
 		{B6, 0x2100000000200, 0x21d0202020200},
 	}
 
-	InitSliderAttacks(Rook)
+	InitSliderAtt(Rook)
 
 	for _, tc := range testCases {
 		if result := GetRookAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetRookAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occ, tc.expect, result)
+			t.Errorf("GetRookAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
 }

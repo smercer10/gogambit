@@ -169,14 +169,14 @@ var CharToSquare = map[string]int{
 // SideToMove is the current side to move.
 var SideToMove int = White
 
-// EnPassantSquare is the current en passant square (if any).
-var EnPassantSquare int = NA
+// EnPassantSq is the current en passant square (if any).
+var EnPassantSq int = NA
 
 // CastlingRights is the current castling rights.
 var CastlingRights int = WKS | WQS | BKS | BQS
 
-// CastlingRightsMap maps castling rights to an ASCII representation.
-var CastlingRightsMap = map[int]string{
+// CastlingMap maps castling rights to an ASCII representation.
+var CastlingMap = map[int]string{
 	WKS | WQS | BKS | BQS: "KQkq",
 	WKS | WQS | BKS:       "KQk-",
 	WKS | WQS | BQS:       "KQ-q",

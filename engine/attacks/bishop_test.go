@@ -21,8 +21,8 @@ func TestMaskRelBishopOcc(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := MaskRelBishopOcc(tc.sq); result != tc.expect {
-			t.Errorf("MaskRelBishopOcc failed for sq = %d: expect 0x%x, got 0x%x",
-				tc.sq, tc.expect, result)
+			t.Errorf("MaskRelBishopOcc failed for sq = %s: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.expect, result)
 		}
 	}
 }
@@ -42,8 +42,8 @@ func TestGenBishopAttOTF(t *testing.T) {
 
 	for _, tc := range testCases {
 		if result := GenBishopAttOTF(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GenBishopAttOTF failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occ, tc.expect, result)
+			t.Errorf("GenBishopAttOTF failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
 }
@@ -63,12 +63,12 @@ func TestGetBishopAttacks(t *testing.T) {
 		{C2, 0x1001000000, 0x804020110a000a},
 	}
 
-	InitSliderAttacks(Bishop)
+	InitSliderAtt(Bishop)
 
 	for _, tc := range testCases {
 		if result := GetBishopAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetBishopAttacks failed for sq = %d, occ = 0x%x: expect 0x%x, got 0x%x",
-				tc.sq, tc.occ, tc.expect, result)
+			t.Errorf("GetBishopAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
 }

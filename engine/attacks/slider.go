@@ -98,8 +98,8 @@ func FindMagicNumber(sq int, piece int) Bitboard {
 	return 0x0
 }
 
-// InitSliderAttacks initializes the necessary LUTs to get bishop or rook attacks.
-func InitSliderAttacks(piece int) {
+// InitSliderAtt initializes the necessary LUTs to get bishop or rook attacks.
+func InitSliderAtt(piece int) {
 	for sq := A1; sq <= H8; sq++ {
 		if piece == Bishop {
 			// Init bishop relevant occ masks LUT

@@ -20,7 +20,7 @@ func (bb Bitboard) Print() {
 
 		for f := 0; f < 8; f++ {
 			sq := r*8 + f
-			if bb.GetBit(sq) {
+			if bb.IsSet(sq) {
 				fmt.Print("1 ")
 			} else {
 				fmt.Print("0 ")
@@ -43,8 +43,8 @@ func (bb Bitboard) ClearBit(sq int) Bitboard {
 	return bb &^ (1 << sq)
 }
 
-// GetBit checks if the bit at the given square is set to 1.
-func (bb Bitboard) GetBit(sq int) bool {
+// IsSet checks if the bit at the given square is set to 1.
+func (bb Bitboard) IsSet(sq int) bool {
 	return bb&(1<<sq) != 0
 }
 
@@ -74,8 +74,8 @@ const NotFileAB = Bitboard(0xfcfcfcfcfcfcfcfc)
 // NotFileGH is a bitboard with only the G and H files cleared.
 const NotFileGH = Bitboard(0x3f3f3f3f3f3f3f3f)
 
-// PieceBitboards is an array of occupancy bitboards for each piece type.
-var PieceBitboards = [12]Bitboard{
+// PieceOcc is an array of occupancy bitboards for each piece type.
+var PieceOcc = [12]Bitboard{
 	// White
 	Bitboard(0xff00), // Pawns
 	Bitboard(0x42),   // Knights
@@ -93,8 +93,8 @@ var PieceBitboards = [12]Bitboard{
 	Bitboard(0x1000000000000000), // King
 }
 
-// SideBitboards is an array of occupancy bitboards for white and/or black pieces.
-var SideBitboards = [3]Bitboard{
+// SideOcc is an array of occupancy bitboards for white and/or black pieces.
+var SideOcc = [3]Bitboard{
 	// White
 	Bitboard(0x000000000000ffff),
 
@@ -117,7 +117,7 @@ func PrintCurrentBoard() {
 			piece := -1
 
 			for p := WP; p <= BK; p++ {
-				if PieceBitboards[p].GetBit(sq) {
+				if PieceOcc[p].IsSet(sq) {
 					piece = p
 					break
 				}
@@ -136,23 +136,23 @@ func PrintCurrentBoard() {
 	fmt.Println("    a b c d e f g h")
 
 	fmt.Printf("\nSide to move: %s\n", Sides[SideToMove])
-	fmt.Printf("En passant square: %s\n", Squares[EnPassantSquare])
-	fmt.Printf("Castling rights: %s\n", CastlingRightsMap[CastlingRights])
+	fmt.Printf("En passant square: %s\n", Squares[EnPassantSq])
+	fmt.Printf("Castling rights: %s\n", CastlingMap[CastlingRights])
 }
 
 // ParseFEN parses a FEN string and sets the board position and game states accordingly.
 func ParseFEN(fen string) {
 	// Reset all bitboards and game states
 	for p := WP; p <= BK; p++ {
-		PieceBitboards[p] = 0x0
+		PieceOcc[p] = 0x0
 	}
 
 	for s := White; s <= Both; s++ {
-		SideBitboards[s] = 0x0
+		SideOcc[s] = 0x0
 	}
 
 	SideToMove = White
-	EnPassantSquare = NA
+	EnPassantSq = NA
 	CastlingRights = 0b0000
 
 	fenSplit := strings.Split(fen, " ")
@@ -171,13 +171,13 @@ func ParseFEN(fen string) {
 			piece := CharToPiece[byte(char)]
 			sq := r*8 + f
 
-			PieceBitboards[piece] = PieceBitboards[piece].SetBit(sq)
-			SideBitboards[Both] = SideBitboards[Both].SetBit(sq)
+			PieceOcc[piece] = PieceOcc[piece].SetBit(sq)
+			SideOcc[Both] = SideOcc[Both].SetBit(sq)
 
 			if piece <= WK {
-				SideBitboards[White] = SideBitboards[White].SetBit(sq)
+				SideOcc[White] = SideOcc[White].SetBit(sq)
 			} else {
-				SideBitboards[Black] = SideBitboards[Black].SetBit(sq)
+				SideOcc[Black] = SideOcc[Black].SetBit(sq)
 			}
 			f++
 		}
@@ -208,6 +208,6 @@ func ParseFEN(fen string) {
 
 	// Set en passant square
 	if len(fenSplit) > 3 && fenSplit[3] != "-" {
-		EnPassantSquare = CharToSquare[fenSplit[3]]
+		EnPassantSq = CharToSquare[fenSplit[3]]
 	}
 }

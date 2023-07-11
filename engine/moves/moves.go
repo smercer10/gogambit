@@ -297,5 +297,29 @@ func GenMoves() {
 				bb = bb.ClearBit(srcSq)
 			}
 		}
+
+		// Queen moves
+		if SideToMove == White && p == WQ || SideToMove == Black && p == BQ {
+			for bb != 0x0 {
+				srcSq = bb.GetLSB()
+
+				att = a.GetQueenAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+
+				for att != 0x0 {
+					trgtSq = att.GetLSB()
+
+					// Quiet move
+					if !SideOcc[opp].IsSet(trgtSq) {
+						fmt.Printf("Quiet queen move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					} else { // Capture
+						fmt.Printf("Queen capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					}
+
+					att = att.ClearBit(trgtSq)
+				}
+
+				bb = bb.ClearBit(srcSq)
+			}
+		}
 	}
 }

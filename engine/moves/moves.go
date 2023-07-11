@@ -249,5 +249,29 @@ func GenMoves() {
 				bb = bb.ClearBit(srcSq)
 			}
 		}
+
+		// Bishop moves
+		if SideToMove == White && p == WB || SideToMove == Black && p == BB {
+			for bb != 0x0 {
+				srcSq = bb.GetLSB()
+
+				att = a.GetBishopAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+
+				for att != 0x0 {
+					trgtSq = att.GetLSB()
+
+					// Quiet move
+					if !SideOcc[opp].IsSet(trgtSq) {
+						fmt.Printf("Quiet bishop move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					} else { // Capture
+						fmt.Printf("Bishop capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					}
+
+					att = att.ClearBit(trgtSq)
+				}
+
+				bb = bb.ClearBit(srcSq)
+			}
+		}
 	}
 }

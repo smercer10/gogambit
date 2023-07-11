@@ -131,6 +131,25 @@ func GenMoves() {
 					bb = bb.ClearBit(srcSq)
 				}
 			}
+
+			if p == WK {
+				// Castle kingside
+				if CastlingRights&WKS != 0 {
+					if !SideOcc[Both].IsSet(F1) && !SideOcc[Both].IsSet(G1) {
+						if !IsAttacked(E1, Black) && !IsAttacked(F1, Black) {
+							fmt.Println("Castle kingside")
+						}
+					}
+				}
+				// Castle queenside
+				if CastlingRights&WQS != 0 {
+					if !SideOcc[Both].IsSet(D1) && !SideOcc[Both].IsSet(C1) && !SideOcc[Both].IsSet(B1) {
+						if !IsAttacked(E1, Black) && !IsAttacked(D1, Black) {
+							fmt.Println("Castle queenside")
+						}
+					}
+				}
+			}
 		} else { // Black
 			// Pawn moves
 			if p == BP {
@@ -176,6 +195,25 @@ func GenMoves() {
 					}
 
 					bb = bb.ClearBit(srcSq)
+				}
+			}
+
+			if p == BK {
+				// Castle kingside
+				if CastlingRights&BKS != 0 {
+					if !SideOcc[Both].IsSet(F8) && !SideOcc[Both].IsSet(G8) {
+						if !IsAttacked(E8, White) && !IsAttacked(F8, White) {
+							fmt.Println("Castle kingside")
+						}
+					}
+				}
+				// Castle queenside
+				if CastlingRights&BQS != 0 {
+					if !SideOcc[Both].IsSet(D8) && !SideOcc[Both].IsSet(C8) && !SideOcc[Both].IsSet(B8) {
+						if !IsAttacked(E8, White) && !IsAttacked(D8, White) {
+							fmt.Println("Castle queenside")
+						}
+					}
 				}
 			}
 		}

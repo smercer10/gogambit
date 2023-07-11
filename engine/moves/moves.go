@@ -273,5 +273,29 @@ func GenMoves() {
 				bb = bb.ClearBit(srcSq)
 			}
 		}
+
+		// Rook moves
+		if SideToMove == White && p == WR || SideToMove == Black && p == BR {
+			for bb != 0x0 {
+				srcSq = bb.GetLSB()
+
+				att = a.GetRookAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+
+				for att != 0x0 {
+					trgtSq = att.GetLSB()
+
+					// Quiet move
+					if !SideOcc[opp].IsSet(trgtSq) {
+						fmt.Printf("Quiet rook move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					} else { // Capture
+						fmt.Printf("Rook capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					}
+
+					att = att.ClearBit(trgtSq)
+				}
+
+				bb = bb.ClearBit(srcSq)
+			}
+		}
 	}
 }

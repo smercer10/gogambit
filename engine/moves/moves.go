@@ -250,6 +250,30 @@ func GenMoves() {
 			}
 		}
 
+		// King moves
+		if SideToMove == White && p == WK || SideToMove == Black && p == BK {
+			for bb != 0x0 {
+				srcSq = bb.GetLSB()
+
+				att = a.KingAttacks[srcSq] & ^SideOcc[SideToMove]
+
+				for att != 0x0 {
+					trgtSq = att.GetLSB()
+
+					// Quiet move
+					if !SideOcc[opp].IsSet(trgtSq) {
+						fmt.Printf("Quiet king move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					} else { // Capture
+						fmt.Printf("King capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					}
+
+					att = att.ClearBit(trgtSq)
+				}
+
+				bb = bb.ClearBit(srcSq)
+			}
+		}
+
 		// Bishop moves
 		if SideToMove == White && p == WB || SideToMove == Black && p == BB {
 			for bb != 0x0 {

@@ -11,11 +11,13 @@ import (
 func main() {
 	initAll()
 
-	ParseFEN("r3k1nr/1bq2ppp/p2p4/1p1P1Q2/1P6/1B4P1/4PPBP/R5K1 b kq - 0 27")
+	ParseFEN("r3k1nr/1bqP1ppp/p3p3/1pP11Q2/1P2Pp2/1B4P1/1p3PBP/Rp4K1 w kq b6 0 27")
 
 	PrintCurrentBoard()
 
-	fmt.Printf("%t", m.IsAttacked(C7, White))
+	fmt.Println()
+
+	m.GenMoves()
 }
 
 // initAll initializes all necessary LUTs.

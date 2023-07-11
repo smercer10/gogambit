@@ -13,7 +13,7 @@ func SetOccupancy(mask Bitboard, bits int, idx int) Bitboard {
 	occ := Bitboard(0x0)
 
 	for b := 0; b < bits; b++ {
-		sq := mask.GetLeastSignificantBit()
+		sq := mask.GetLSB()
 
 		mask = mask.ClearBit(sq)
 

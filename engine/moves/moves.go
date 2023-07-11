@@ -71,3 +71,113 @@ func PrintAttacked(by int) {
 	fmt.Println("    a b c d e f g h")
 	fmt.Printf("\nBitboard: 0x%x\n", bb)
 }
+
+// GenMoves generates all legal moves.
+func GenMoves() {
+	var srcSq int
+
+	var trgtSq int
+
+	var bb Bitboard
+
+	var att Bitboard
+
+	for p := WP; p <= BK; p++ {
+		bb = PieceOcc[p]
+
+		if SideToMove == White {
+			// Pawn moves
+			if p == WP {
+				for bb != 0x0 {
+					srcSq = bb.GetLSB()
+					trgtSq = srcSq + 8
+
+					if trgtSq <= H8 && !SideOcc[Both].IsSet(trgtSq) {
+						// Promotion
+						if srcSq >= A7 && srcSq <= H7 {
+							fmt.Printf("Promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						} else { // Single push
+							fmt.Printf("Single push: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							// Double push
+							if srcSq >= A2 && srcSq <= H2 && !SideOcc[Both].IsSet(trgtSq+8) {
+								fmt.Printf("Double push: %s%s\n", Squares[srcSq], Squares[trgtSq+8])
+							}
+						}
+					}
+
+					att = a.PawnAttacks[White][srcSq] & SideOcc[Black]
+
+					for att != 0x0 {
+						trgtSq = att.GetLSB()
+						// Capture with promotion
+						if srcSq >= A7 && srcSq <= H7 {
+							fmt.Printf("Capture with promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						} else { // Capture
+							fmt.Printf("Capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						}
+
+						att = att.ClearBit(trgtSq)
+					}
+					// En passant capture
+					if EnPassantSq != NA {
+						enPassantAtt := Bitboard(a.PawnAttacks[White][srcSq] & (1 << EnPassantSq))
+
+						if enPassantAtt != 0x0 {
+							enPassantTrgt := enPassantAtt.GetLSB()
+							fmt.Printf("En passant capture: %s%s\n", Squares[srcSq], Squares[enPassantTrgt])
+						}
+					}
+
+					bb = bb.ClearBit(srcSq)
+				}
+			}
+		} else { // Black
+			// Pawn moves
+			if p == BP {
+				for bb != 0x0 {
+					srcSq = bb.GetLSB()
+					trgtSq = srcSq - 8
+
+					if trgtSq >= A1 && !SideOcc[Both].IsSet(trgtSq) {
+						// Promotion
+						if srcSq >= A2 && srcSq <= H2 {
+							fmt.Printf("Promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						} else { // Single push
+							fmt.Printf("Single push: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							// Double push
+							if srcSq >= A7 && srcSq <= H7 && !SideOcc[Both].IsSet(trgtSq-8) {
+								fmt.Printf("Double push: %s%s\n", Squares[srcSq], Squares[trgtSq-8])
+							}
+						}
+					}
+
+					att = a.PawnAttacks[Black][srcSq] & SideOcc[White]
+
+					for att != 0x0 {
+						trgtSq = att.GetLSB()
+
+						// Capture with promotion
+						if srcSq >= A2 && srcSq <= H2 {
+							fmt.Printf("Capture with promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						} else { // Capture
+							fmt.Printf("Capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						}
+
+						att = att.ClearBit(trgtSq)
+					}
+					// En passant capture
+					if EnPassantSq != NA {
+						enPassantAtt := Bitboard(a.PawnAttacks[Black][srcSq] & (1 << EnPassantSq))
+
+						if enPassantAtt != 0x0 {
+							enPassantTrgt := enPassantAtt.GetLSB()
+							fmt.Printf("En passant capture: %s%s\n", Squares[srcSq], Squares[enPassantTrgt])
+						}
+					}
+
+					bb = bb.ClearBit(srcSq)
+				}
+			}
+		}
+	}
+}

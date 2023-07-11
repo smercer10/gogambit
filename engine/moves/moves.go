@@ -82,6 +82,8 @@ func GenMoves() {
 
 	var att Bitboard
 
+	var opp int
+
 	for p := WP; p <= BK; p++ {
 		bb = PieceOcc[p]
 
@@ -215,6 +217,36 @@ func GenMoves() {
 						}
 					}
 				}
+			}
+		}
+
+		if SideToMove == White {
+			opp = Black
+		} else { // Black
+			opp = White
+		}
+
+		// Knight moves
+		if SideToMove == White && p == WN || SideToMove == Black && p == BN {
+			for bb != 0x0 {
+				srcSq = bb.GetLSB()
+
+				att = a.KnightAttacks[srcSq] & ^SideOcc[SideToMove]
+
+				for att != 0x0 {
+					trgtSq = att.GetLSB()
+
+					// Quiet move
+					if !SideOcc[opp].IsSet(trgtSq) {
+						fmt.Printf("Quiet knight move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					} else { // Capture
+						fmt.Printf("Knight capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+					}
+
+					att = att.ClearBit(trgtSq)
+				}
+
+				bb = bb.ClearBit(srcSq)
 			}
 		}
 	}

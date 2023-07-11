@@ -9,7 +9,7 @@ import (
 )
 
 // IsAttacked checks if a square is currently attacked by a given side.
-func IsAttacked(sq int, by int) bool {
+func IsAttacked(sq, by int) bool {
 	if by == White && (a.PawnAttacks[Black][sq]&PieceOcc[WP]) != 0 {
 		return true
 	}
@@ -72,17 +72,11 @@ func PrintAttacked(by int) {
 	fmt.Printf("\nBitboard: 0x%x\n", bb)
 }
 
-// GenMoves generates all legal moves.
+// GenMoves generates all legal moves for the current board position and side to move.
 func GenMoves() {
-	var srcSq int
+	var srcSq, trgtSq, opp int
 
-	var trgtSq int
-
-	var bb Bitboard
-
-	var att Bitboard
-
-	var opp int
+	var bb, att Bitboard
 
 	for p := WP; p <= BK; p++ {
 		bb = PieceOcc[p]
@@ -346,4 +340,50 @@ func GenMoves() {
 			}
 		}
 	}
+}
+
+// EncMove encodes move details into a single integer.
+func EncMove(src, trgt, pc, prom, cap, dp, ep, cast uint8) uint32 {
+	return uint32(src) | uint32(trgt)<<6 | uint32(pc)<<12 | uint32(prom)<<16 |
+		uint32(cap)<<20 | uint32(dp)<<21 | uint32(ep)<<22 | uint32(cast)<<23
+}
+
+// DecSrc returns the source square from an encoded move.
+func DecSrc(m uint32) uint8 {
+	return uint8(m & 0x3F)
+}
+
+// DecTrgt returns the target square from an encoded move.
+func DecTrgt(m uint32) uint8 {
+	return uint8(m & 0xFC0 >> 6)
+}
+
+// DecPc returns the moved piece type from an encoded move.
+func DecPc(m uint32) uint8 {
+	return uint8(m & 0xF000 >> 12)
+}
+
+// DecProm returns the promotion piece type from an encoded move.
+func DecProm(m uint32) uint8 {
+	return uint8(m & 0xF0000 >> 16)
+}
+
+// DecCap returns the piece captured flag from an encoded move.
+func DecCap(m uint32) uint8 {
+	return uint8(m & 0x100000 >> 20)
+}
+
+// DecDp returns the double pawn push flag from an encoded move.
+func DecDp(m uint32) uint8 {
+	return uint8(m & 0x200000 >> 21)
+}
+
+// DecEp returns the en passant flag from an encoded move.
+func DecEp(m uint32) uint8 {
+	return uint8(m & 0x400000 >> 22)
+}
+
+// DecCast returns the castling flag of an encoded move.
+func DecCast(m uint32) uint8 {
+	return uint8(m & 0x800000 >> 23)
 }

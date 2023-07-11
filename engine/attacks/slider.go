@@ -9,7 +9,7 @@ import (
 )
 
 // SetOccupancy sets an occupancy combination for the mask of relevant occupancy bits.
-func SetOccupancy(mask Bitboard, bits int, idx int) Bitboard {
+func SetOccupancy(mask Bitboard, bits, idx int) Bitboard {
 	occ := Bitboard(0x0)
 
 	for b := 0; b < bits; b++ {
@@ -31,12 +31,8 @@ func GenMagicNumCand() Bitboard {
 }
 
 // FindMagicNumber finds a magic number for a bishop or rook at a given square.
-func FindMagicNumber(sq int, piece int) Bitboard {
-	var occ [4096]Bitboard
-
-	var att [4096]Bitboard
-
-	var usedAtt [4096]Bitboard
+func FindMagicNumber(sq, piece int) Bitboard {
+	var occ, att, usedAtt [4096]Bitboard
 
 	var mask Bitboard
 

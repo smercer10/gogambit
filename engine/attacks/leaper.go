@@ -7,10 +7,8 @@ import (
 )
 
 // GenPawnAttacks generates the pawn attacks for a given square and side.
-func GenPawnAttacks(sq int, side int) Bitboard {
-	att := Bitboard(0x0)
-
-	bb := Bitboard(0x0)
+func GenPawnAttacks(sq, side int) Bitboard {
+	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
 
@@ -27,9 +25,7 @@ func GenPawnAttacks(sq int, side int) Bitboard {
 
 // GenKnightAttacks generates the knight attacks for a given square.
 func GenKnightAttacks(sq int) Bitboard {
-	att := Bitboard(0x0)
-
-	bb := Bitboard(0x0)
+	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
 
@@ -47,9 +43,7 @@ func GenKnightAttacks(sq int) Bitboard {
 
 // GenKingAttacks generates the king attacks for a given square.
 func GenKingAttacks(sq int) Bitboard {
-	att := Bitboard(0x0)
-
-	bb := Bitboard(0x0)
+	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
 

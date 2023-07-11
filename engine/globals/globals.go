@@ -120,6 +120,12 @@ var Squares = [65]string{
 	"N/A",
 }
 
+// Pieces is an array of piece types as strings.
+var Pieces = [12]string{
+	"WP", "WN", "WB", "WR", "WQ", "WK",
+	"BP", "BN", "BB", "BR", "BQ", "BK",
+}
+
 // Sides is an array of player sides as strings.
 var Sides = [2]string{
 	"White",

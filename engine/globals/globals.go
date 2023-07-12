@@ -190,11 +190,20 @@ var SideToMove int = White
 // EnPassantSq is the current en passant square (if any).
 var EnPassantSq int = NA
 
-// CastlingRights is the current castling rights.
-var CastlingRights int = WKS | WQS | BKS | BQS
+// CastRights is the current castling rights.
+var CastRights int = WKS | WQS | BKS | BQS
 
-// CastlingMap maps castling rights to an ASCII representation.
-var CastlingMap = map[int]string{
+// SideToMoveC is the copy of SideToMove.
+var SideToMoveC int
+
+// EnPassantSqC is the copy of EnPassantSq.
+var EnPassantSqC int
+
+// CastRightsC is the copy of CastRights.
+var CastRightsC int
+
+// CastMap maps castling rights to an ASCII representation.
+var CastMap = map[int]string{
 	WKS | WQS | BKS | BQS: "KQkq",
 	WKS | WQS | BKS:       "KQk-",
 	WKS | WQS | BQS:       "KQ-q",

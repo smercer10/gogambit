@@ -138,7 +138,7 @@ func GenMoves(moves *MoveList) {
 
 			if p == WK {
 				// Castle kingside
-				if CastlingRights&WKS != 0 {
+				if CastRights&WKS != 0 {
 					if !SideOcc[Both].IsSet(F1) && !SideOcc[Both].IsSet(G1) {
 						if !IsAttacked(E1, Black) && !IsAttacked(F1, Black) {
 							moves.AddMove(EncMove(E1, G1, p, 0, 0, 0, 0, 1))
@@ -146,7 +146,7 @@ func GenMoves(moves *MoveList) {
 					}
 				}
 				// Castle queenside
-				if CastlingRights&WQS != 0 {
+				if CastRights&WQS != 0 {
 					if !SideOcc[Both].IsSet(D1) && !SideOcc[Both].IsSet(C1) && !SideOcc[Both].IsSet(B1) {
 						if !IsAttacked(E1, Black) && !IsAttacked(D1, Black) {
 							moves.AddMove(EncMove(E1, C1, p, 0, 0, 0, 0, 1))
@@ -210,7 +210,7 @@ func GenMoves(moves *MoveList) {
 
 			if p == BK {
 				// Castle kingside
-				if CastlingRights&BKS != 0 {
+				if CastRights&BKS != 0 {
 					if !SideOcc[Both].IsSet(F8) && !SideOcc[Both].IsSet(G8) {
 						if !IsAttacked(E8, White) && !IsAttacked(F8, White) {
 							moves.AddMove(EncMove(E8, G8, p, 0, 0, 0, 0, 1))
@@ -218,7 +218,7 @@ func GenMoves(moves *MoveList) {
 					}
 				}
 				// Castle queenside
-				if CastlingRights&BQS != 0 {
+				if CastRights&BQS != 0 {
 					if !SideOcc[Both].IsSet(D8) && !SideOcc[Both].IsSet(C8) && !SideOcc[Both].IsSet(B8) {
 						if !IsAttacked(E8, White) && !IsAttacked(D8, White) {
 							moves.AddMove(EncMove(E8, C8, p, 0, 0, 0, 0, 1))

@@ -105,6 +105,12 @@ var SideOcc = [3]Bitboard{
 	Bitboard(0xffff00000000ffff),
 }
 
+// PieceOccC is the copy of PieceOcc.
+var PieceOccC [12]Bitboard
+
+// SideOccC is the copy of SideOcc.
+var SideOccC [3]Bitboard
+
 // PrintCurrentBoard prints the current board position and game states.
 func PrintCurrentBoard() {
 	fmt.Println("  +-----------------+")
@@ -137,7 +143,7 @@ func PrintCurrentBoard() {
 
 	fmt.Printf("\nSide to move: %s\n", Sides[SideToMove])
 	fmt.Printf("En passant square: %s\n", Squares[EnPassantSq])
-	fmt.Printf("Castling rights: %s\n", CastlingMap[CastlingRights])
+	fmt.Printf("Castling rights: %s\n", CastMap[CastRights])
 }
 
 // ParseFEN parses a FEN string and sets the board position and game states accordingly.
@@ -153,7 +159,7 @@ func ParseFEN(fen string) {
 
 	SideToMove = White
 	EnPassantSq = NA
-	CastlingRights = 0b0000
+	CastRights = 0b0000
 
 	fenSplit := strings.Split(fen, " ")
 
@@ -195,13 +201,13 @@ func ParseFEN(fen string) {
 		for _, char := range fenSplit[2] {
 			switch char {
 			case 'K':
-				CastlingRights |= WKS
+				CastRights |= WKS
 			case 'Q':
-				CastlingRights |= WQS
+				CastRights |= WQS
 			case 'k':
-				CastlingRights |= BKS
+				CastRights |= BKS
 			case 'q':
-				CastlingRights |= BQS
+				CastRights |= BQS
 			}
 		}
 	}
@@ -210,4 +216,24 @@ func ParseFEN(fen string) {
 	if len(fenSplit) > 3 && fenSplit[3] != "-" {
 		EnPassantSq = CharToSquare[fenSplit[3]]
 	}
+}
+
+// CopyBoard copies the current board position and game states.
+func CopyBoard() {
+	copy(PieceOccC[:], PieceOcc[:])
+	copy(SideOccC[:], SideOcc[:])
+
+	SideToMoveC = SideToMove
+	EnPassantSqC = EnPassantSq
+	CastRightsC = CastRights
+}
+
+// RestoreBoard restores the board position and game states from the copies.
+func RestoreBoard() {
+	copy(PieceOcc[:], PieceOccC[:])
+	copy(SideOcc[:], SideOccC[:])
+
+	SideToMove = SideToMoveC
+	EnPassantSq = EnPassantSqC
+	CastRights = CastRightsC
 }

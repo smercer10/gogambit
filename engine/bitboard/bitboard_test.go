@@ -105,12 +105,12 @@ func TestGetLSB(t *testing.T) {
 // TestParseFEN tests the ParseFEN function.
 func TestParseFEN(t *testing.T) {
 	testCases := []struct {
-		fen             string
-		whiteOcc        Bitboard
-		blackOcc        Bitboard
-		sideToMove      int
-		castlingRights  int
-		enPassantSquare int
+		fen         string
+		whiteOcc    Bitboard
+		blackOcc    Bitboard
+		sideToMove  int
+		castRights  int
+		enPassantSq int
 	}{
 		{
 			"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -148,14 +148,14 @@ func TestParseFEN(t *testing.T) {
 				Sides[tc.sideToMove], Sides[SideToMove])
 		}
 
-		if CastlingRights != tc.castlingRights {
-			t.Errorf("ParseFEN failed: expect castlingRights = 0b%b, got 0b%b",
-				tc.castlingRights, CastlingRights)
+		if CastRights != tc.castRights {
+			t.Errorf("ParseFEN failed: expect castRights = 0b%b, got 0b%b",
+				tc.castRights, CastRights)
 		}
 
-		if EnPassantSq != tc.enPassantSquare {
-			t.Errorf("ParseFEN failed: expect enPassantSquare = %s, got %s",
-				Squares[tc.enPassantSquare], Squares[EnPassantSq])
+		if EnPassantSq != tc.enPassantSq {
+			t.Errorf("ParseFEN failed: expect enPassantSq = %s, got %s",
+				Squares[tc.enPassantSq], Squares[EnPassantSq])
 		}
 	}
 }

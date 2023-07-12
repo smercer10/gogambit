@@ -51,8 +51,8 @@ func TestEncAndDec(t *testing.T) {
 	src := DecSrc(m)
 	trgt := DecTrgt(m)
 	pc := DecPc(m)
-	prom := DecProm(m)
-	capt := DecCap(m)
+	proPc := DecProPc(m)
+	capt := DecCapt(m)
 	dp := DecDp(m)
 	ep := DecEp(m)
 	cast := DecCast(m)
@@ -69,12 +69,12 @@ func TestEncAndDec(t *testing.T) {
 		t.Errorf("DecPc failed: expect WP, got %s", Pieces[pc])
 	}
 
-	if prom != 0b1111 {
-		t.Errorf("DecProm failed: expect 0b1111, got 0b%b", prom)
+	if proPc != 0b1111 {
+		t.Errorf("DecProPc failed: expect 0b1111, got 0b%b", proPc)
 	}
 
 	if capt != 0 {
-		t.Errorf("DecCap failed: expect 0, got %d", capt)
+		t.Errorf("DecCapt failed: expect 0, got %d", capt)
 	}
 
 	if dp != 1 {

@@ -228,8 +228,8 @@ func CopyBoard() {
 	CastRightsC = CastRights
 }
 
-// RestoreBoard restores the board position and game states from the copies.
-func RestoreBoard() {
+// TakeBack restores the board position and game states from the copies.
+func TakeBack() {
 	copy(PieceOcc[:], PieceOccC[:])
 	copy(SideOcc[:], SideOccC[:])
 

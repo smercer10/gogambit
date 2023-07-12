@@ -107,6 +107,12 @@ const (
 	BQS
 )
 
+// Enum for move types.
+const (
+	AllMoves = iota
+	OnlyCapt
+)
+
 // Squares is an array of board coordinates as strings.
 var Squares = [65]string{
 	"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
@@ -220,4 +226,16 @@ var CastMap = map[int]string{
 	BKS:                   "--k-",
 	BQS:                   "---q",
 	0b000:                 "----",
+}
+
+// PostMoveCast is an array of resulting castling rights after the piece starting at the respective index has moved.
+var PostMoveCast = [64]int{
+	13, 15, 15, 15, 12, 15, 15, 14,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	15, 15, 15, 15, 15, 15, 15, 15,
+	7, 15, 15, 15, 3, 15, 15, 11,
 }

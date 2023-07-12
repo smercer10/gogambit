@@ -159,3 +159,29 @@ func TestParseFEN(t *testing.T) {
 		}
 	}
 }
+
+// TestCopyBoardAndTakeBack tests the CopyBoard and TakeBack functions.
+func TestCopyBoardAndTakeBack(t *testing.T) {
+	ParseFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+
+	CopyBoard()
+
+	ParseFEN("8/8/8/8/8/8/8/8 b - - 0 1")
+
+	TakeBack()
+
+	if SideOcc[White] != 0xffff {
+		t.Errorf("CopyBoard and TakeBack failed: expect whiteOcc = 0xffff, got 0x%x",
+			SideOcc[White])
+	}
+
+	if SideToMove != White {
+		t.Errorf("CopyBoard and TakeBack failed: expect sideToMove = White, got %s",
+			Sides[SideToMove])
+	}
+
+	if CastRights != 0b1111 {
+		t.Errorf("CopyBoard and TakeBack failed: expect castRights = 0b1111, got 0b%b",
+			CastRights)
+	}
+}

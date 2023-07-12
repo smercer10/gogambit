@@ -73,7 +73,9 @@ func PrintAttacked(by int) {
 }
 
 // GenMoves generates all legal moves for the current board position and side to move.
-func GenMoves() {
+func GenMoves(moves *MoveList) {
+	moves.Count = 0
+
 	var srcSq, trgtSq, opp int
 
 	var bb, att Bitboard
@@ -91,12 +93,15 @@ func GenMoves() {
 					if trgtSq <= H8 && !SideOcc[Both].IsSet(trgtSq) {
 						// Promotion
 						if srcSq >= A7 && srcSq <= H7 {
-							fmt.Printf("Promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WN, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WB, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WR, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WQ, 0, 0, 0, 0))
 						} else { // Single push
-							fmt.Printf("Single push: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 							// Double push
 							if srcSq >= A2 && srcSq <= H2 && !SideOcc[Both].IsSet(trgtSq+8) {
-								fmt.Printf("Double push: %s%s\n", Squares[srcSq], Squares[trgtSq+8])
+								moves.AddMove(EncMove(srcSq, trgtSq+8, p, 0, 0, 1, 0, 0))
 							}
 						}
 					}
@@ -107,9 +112,12 @@ func GenMoves() {
 						trgtSq = att.GetLSB()
 						// Capture with promotion
 						if srcSq >= A7 && srcSq <= H7 {
-							fmt.Printf("Capture with promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WN, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WB, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WR, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, WQ, 1, 0, 0, 0))
 						} else { // Capture
-							fmt.Printf("Capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 						}
 
 						att = att.ClearBit(trgtSq)
@@ -120,7 +128,7 @@ func GenMoves() {
 
 						if enPassantAtt != 0x0 {
 							enPassantTrgt := enPassantAtt.GetLSB()
-							fmt.Printf("En passant capture: %s%s\n", Squares[srcSq], Squares[enPassantTrgt])
+							moves.AddMove(EncMove(srcSq, enPassantTrgt, p, 0, 1, 0, 1, 0))
 						}
 					}
 
@@ -133,7 +141,7 @@ func GenMoves() {
 				if CastlingRights&WKS != 0 {
 					if !SideOcc[Both].IsSet(F1) && !SideOcc[Both].IsSet(G1) {
 						if !IsAttacked(E1, Black) && !IsAttacked(F1, Black) {
-							fmt.Println("Castle kingside")
+							moves.AddMove(EncMove(E1, G1, p, 0, 0, 0, 0, 1))
 						}
 					}
 				}
@@ -141,7 +149,7 @@ func GenMoves() {
 				if CastlingRights&WQS != 0 {
 					if !SideOcc[Both].IsSet(D1) && !SideOcc[Both].IsSet(C1) && !SideOcc[Both].IsSet(B1) {
 						if !IsAttacked(E1, Black) && !IsAttacked(D1, Black) {
-							fmt.Println("Castle queenside")
+							moves.AddMove(EncMove(E1, C1, p, 0, 0, 0, 0, 1))
 						}
 					}
 				}
@@ -156,12 +164,15 @@ func GenMoves() {
 					if trgtSq >= A1 && !SideOcc[Both].IsSet(trgtSq) {
 						// Promotion
 						if srcSq >= A2 && srcSq <= H2 {
-							fmt.Printf("Promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BN, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BB, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BR, 0, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BQ, 0, 0, 0, 0))
 						} else { // Single push
-							fmt.Printf("Single push: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 							// Double push
 							if srcSq >= A7 && srcSq <= H7 && !SideOcc[Both].IsSet(trgtSq-8) {
-								fmt.Printf("Double push: %s%s\n", Squares[srcSq], Squares[trgtSq-8])
+								moves.AddMove(EncMove(srcSq, trgtSq-8, p, 0, 0, 1, 0, 0))
 							}
 						}
 					}
@@ -173,9 +184,12 @@ func GenMoves() {
 
 						// Capture with promotion
 						if srcSq >= A2 && srcSq <= H2 {
-							fmt.Printf("Capture with promotion: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BN, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BB, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BR, 1, 0, 0, 0))
+							moves.AddMove(EncMove(srcSq, trgtSq, p, BQ, 1, 0, 0, 0))
 						} else { // Capture
-							fmt.Printf("Capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+							moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 						}
 
 						att = att.ClearBit(trgtSq)
@@ -186,7 +200,7 @@ func GenMoves() {
 
 						if enPassantAtt != 0x0 {
 							enPassantTrgt := enPassantAtt.GetLSB()
-							fmt.Printf("En passant capture: %s%s\n", Squares[srcSq], Squares[enPassantTrgt])
+							moves.AddMove(EncMove(srcSq, enPassantTrgt, p, 0, 1, 0, 1, 0))
 						}
 					}
 
@@ -199,7 +213,7 @@ func GenMoves() {
 				if CastlingRights&BKS != 0 {
 					if !SideOcc[Both].IsSet(F8) && !SideOcc[Both].IsSet(G8) {
 						if !IsAttacked(E8, White) && !IsAttacked(F8, White) {
-							fmt.Println("Castle kingside")
+							moves.AddMove(EncMove(E8, G8, p, 0, 0, 0, 0, 1))
 						}
 					}
 				}
@@ -207,7 +221,7 @@ func GenMoves() {
 				if CastlingRights&BQS != 0 {
 					if !SideOcc[Both].IsSet(D8) && !SideOcc[Both].IsSet(C8) && !SideOcc[Both].IsSet(B8) {
 						if !IsAttacked(E8, White) && !IsAttacked(D8, White) {
-							fmt.Println("Castle queenside")
+							moves.AddMove(EncMove(E8, C8, p, 0, 0, 0, 0, 1))
 						}
 					}
 				}
@@ -232,9 +246,9 @@ func GenMoves() {
 
 					// Quiet move
 					if !SideOcc[opp].IsSet(trgtSq) {
-						fmt.Printf("Quiet knight move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 					} else { // Capture
-						fmt.Printf("Knight capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 					}
 
 					att = att.ClearBit(trgtSq)
@@ -256,9 +270,9 @@ func GenMoves() {
 
 					// Quiet move
 					if !SideOcc[opp].IsSet(trgtSq) {
-						fmt.Printf("Quiet king move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 					} else { // Capture
-						fmt.Printf("King capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 					}
 
 					att = att.ClearBit(trgtSq)
@@ -280,9 +294,9 @@ func GenMoves() {
 
 					// Quiet move
 					if !SideOcc[opp].IsSet(trgtSq) {
-						fmt.Printf("Quiet bishop move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 					} else { // Capture
-						fmt.Printf("Bishop capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 					}
 
 					att = att.ClearBit(trgtSq)
@@ -304,9 +318,9 @@ func GenMoves() {
 
 					// Quiet move
 					if !SideOcc[opp].IsSet(trgtSq) {
-						fmt.Printf("Quiet rook move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 					} else { // Capture
-						fmt.Printf("Rook capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 					}
 
 					att = att.ClearBit(trgtSq)
@@ -328,9 +342,9 @@ func GenMoves() {
 
 					// Quiet move
 					if !SideOcc[opp].IsSet(trgtSq) {
-						fmt.Printf("Quiet queen move: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 0, 0, 0, 0))
 					} else { // Capture
-						fmt.Printf("Queen capture: %s%s\n", Squares[srcSq], Squares[trgtSq])
+						moves.AddMove(EncMove(srcSq, trgtSq, p, 0, 1, 0, 0, 0))
 					}
 
 					att = att.ClearBit(trgtSq)

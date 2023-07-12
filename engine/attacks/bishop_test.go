@@ -48,8 +48,8 @@ func TestGenBishopAttOTF(t *testing.T) {
 	}
 }
 
-// TestGetBishopAttacks tests the GetBishopAttacks function.
-func TestGetBishopAttacks(t *testing.T) {
+// TestGetBishopAtt tests the GetBishopAtt function.
+func TestGetBishopAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		occ    Bitboard
@@ -66,8 +66,8 @@ func TestGetBishopAttacks(t *testing.T) {
 	InitSliderAtt(Bishop)
 
 	for _, tc := range testCases {
-		if result := GetBishopAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetBishopAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+		if result := GetBishopAtt(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetBishopAtt failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
 				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}

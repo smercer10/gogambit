@@ -165,8 +165,8 @@ var RookOccMasks [64]Bitboard
 // RookAttacks is a LUT with the possible rook attacks for each square and magic index.
 var RookAttacks [64][4096]Bitboard
 
-// GetRookAttacks returns possible rook attacks for a given square and board occupancy.
-func GetRookAttacks(sq int, occ Bitboard) Bitboard {
+// GetRookAtt returns possible rook attacks for a given square and board occupancy.
+func GetRookAtt(sq int, occ Bitboard) Bitboard {
 	occ &= RookOccMasks[sq]
 	occ *= RookMagicNums[sq]
 	occ >>= 64 - RookRelOccBits[sq]

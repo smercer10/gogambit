@@ -53,8 +53,8 @@ func (bb Bitboard) CountBits() int {
 	return bits.OnesCount64(uint64(bb))
 }
 
-// GetLeastSignificantBit returns the index of the least significant bit set to 1 in a bitboard.
-func (bb Bitboard) GetLeastSignificantBit() int {
+// GetLSB returns the index of the least significant bit set to 1 in a bitboard.
+func (bb Bitboard) GetLSB() int {
 	if bb == 0 {
 		return -1
 	}

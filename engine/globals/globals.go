@@ -120,6 +120,12 @@ var Squares = [65]string{
 	"N/A",
 }
 
+// Pieces is an array of piece types as strings.
+var Pieces = [12]string{
+	"WP", "WN", "WB", "WR", "WQ", "WK",
+	"BP", "BN", "BB", "BR", "BQ", "BK",
+}
+
 // Sides is an array of player sides as strings.
 var Sides = [2]string{
 	"White",
@@ -152,6 +158,18 @@ var CharToPiece = map[byte]int{
 	'r': BR,
 	'q': BQ,
 	'k': BK,
+}
+
+// PromPiece maps side-specific piece values to side-agnostic ASCII piece types for promotions.
+var PromPiece = map[int]byte{
+	WN: 'n',
+	WB: 'b',
+	WR: 'r',
+	WQ: 'q',
+	BN: 'n',
+	BB: 'b',
+	BR: 'r',
+	BQ: 'q',
 }
 
 // CharToSquare maps string squares to their enum values.

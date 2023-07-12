@@ -82,8 +82,8 @@ func TestCountBits(t *testing.T) {
 	}
 }
 
-// TestGetLeastSignificantBit tests the GetLeastSignificantBit method.
-func TestGetLeastSignificantBit(t *testing.T) {
+// TestGetLSB tests the GetLSB method.
+func TestGetLSB(t *testing.T) {
 	testCases := []struct {
 		bb     Bitboard
 		expect int
@@ -95,8 +95,8 @@ func TestGetLeastSignificantBit(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := tc.bb.GetLeastSignificantBit(); result != tc.expect {
-			t.Errorf("GetLeastSignificantBit failed for bb = 0x%x: expect %s, got %s",
+		if result := tc.bb.GetLSB(); result != tc.expect {
+			t.Errorf("GetLSB failed for bb = 0x%x: expect %s, got %s",
 				tc.bb, Squares[tc.expect], Squares[result])
 		}
 	}

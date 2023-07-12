@@ -165,8 +165,8 @@ var BishopOccMasks [64]Bitboard
 // BishopAttacks is a LUT with the possible bishop attacks for each square and magic index.
 var BishopAttacks [64][512]Bitboard
 
-// GetBishopAttacks returns possible bishop attacks for a given square and board occupancy.
-func GetBishopAttacks(sq int, occ Bitboard) Bitboard {
+// GetBishopAtt returns possible bishop attacks for a given square and board occupancy.
+func GetBishopAtt(sq int, occ Bitboard) Bitboard {
 	occ &= BishopOccMasks[sq]
 	occ *= BishopMagicNums[sq]
 	occ >>= 64 - BishopRelOccBits[sq]

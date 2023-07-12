@@ -76,7 +76,7 @@ func PrintAttacked(by int) {
 func GenMoves(moves *MoveList) {
 	moves.Count = 0
 
-	var srcSq, trgtSq, opp int
+	var srcSq, trgtSq int
 
 	var bb, att Bitboard
 
@@ -228,11 +228,7 @@ func GenMoves(moves *MoveList) {
 			}
 		}
 
-		if SideToMove == White {
-			opp = Black
-		} else { // Black
-			opp = White
-		}
+		opp := SideToMove ^ 1
 
 		// Knight moves
 		if SideToMove == White && p == WN || SideToMove == Black && p == BN {
@@ -357,9 +353,9 @@ func GenMoves(moves *MoveList) {
 }
 
 // EncMove encodes move details into a single integer.
-func EncMove(src, trgt, pc, prom, cap, dp, ep, cast int) int {
-	return src | trgt<<6 | pc<<12 | prom<<16 |
-		cap<<20 | dp<<21 | ep<<22 | cast<<23
+func EncMove(src, trgt, pc, proPc, capt, dp, ep, cast int) int {
+	return src | trgt<<6 | pc<<12 | proPc<<16 |
+		capt<<20 | dp<<21 | ep<<22 | cast<<23
 }
 
 // DecSrc returns the source square from an encoded move.
@@ -377,13 +373,13 @@ func DecPc(m int) int {
 	return m & 0xF000 >> 12
 }
 
-// DecProm returns the promotion piece type from an encoded move.
-func DecProm(m int) int {
+// DecProPc returns the promotion piece type from an encoded move.
+func DecProPc(m int) int {
 	return m & 0xF0000 >> 16
 }
 
-// DecCap returns the piece captured flag from an encoded move.
-func DecCap(m int) int {
+// DecCapt returns the piece captured flag from an encoded move.
+func DecCapt(m int) int {
 	return m & 0x100000 >> 20
 }
 
@@ -416,7 +412,7 @@ func (l *MoveList) AddMove(m int) {
 
 // PrintMove prints an encoded move in the UCI format.
 func PrintMove(m int) {
-	fmt.Printf("%s%s%c\n", Squares[DecSrc(m)], Squares[DecTrgt(m)], PromPiece[DecProm(m)])
+	fmt.Printf("%s%s%c\n", Squares[DecSrc(m)], Squares[DecTrgt(m)], PromPiece[DecProPc(m)])
 }
 
 // PrintMoveList prints all the moves in a move list.
@@ -424,4 +420,143 @@ func PrintMoveList(l *MoveList) {
 	for ct := 0; ct < l.Count; ct++ {
 		PrintMove(l.Moves[ct])
 	}
+}
+
+// MakeMove executes an encoded move unless it leaves the king in check.
+func MakeMove(m, flag int) int {
+	if flag == AllMoves {
+		CopyBoard()
+
+		src := DecSrc(m)
+		trgt := DecTrgt(m)
+		pc := DecPc(m)
+		proPc := DecProPc(m)
+		capt := DecCapt(m)
+		dp := DecDp(m)
+		ep := DecEp(m)
+		cast := DecCast(m)
+
+		// Move piece
+		PieceOcc[pc] = PieceOcc[pc].ClearBit(src)
+		SideOcc[SideToMove] = SideOcc[SideToMove].ClearBit(src)
+		SideOcc[Both] = SideOcc[Both].ClearBit(src)
+
+		PieceOcc[pc] = PieceOcc[pc].SetBit(trgt)
+		SideOcc[SideToMove] = SideOcc[SideToMove].SetBit(trgt)
+		SideOcc[Both] = SideOcc[Both].SetBit(trgt)
+
+		// Promotion
+		if proPc != 0 {
+			PieceOcc[pc] = PieceOcc[pc].ClearBit(trgt)
+			PieceOcc[proPc] = PieceOcc[proPc].SetBit(trgt)
+		}
+
+		opp := SideToMove ^ 1
+
+		// Capture
+		if capt == 1 {
+			var startPc, endPc int
+
+			if SideToMove == White {
+				startPc = BP
+				endPc = BK
+			} else { // Black
+				startPc = WP
+				endPc = WK
+			}
+			// Remove captured piece
+			for p := startPc; p <= endPc; p++ {
+				if PieceOcc[p].IsSet(trgt) {
+					PieceOcc[p] = PieceOcc[p].ClearBit(trgt)
+					SideOcc[opp] = SideOcc[opp].ClearBit(trgt)
+
+					break
+				}
+			}
+		}
+
+		EnPassantSq = NA
+
+		// Double pawn push (set en passant square)
+		if dp == 1 {
+			if SideToMove == White {
+				EnPassantSq = trgt - 8
+			} else { // Black
+				EnPassantSq = trgt + 8
+			}
+		}
+		// En passant capture
+		if ep == 1 {
+			if SideToMove == White {
+				PieceOcc[BP] = PieceOcc[BP].ClearBit(trgt - 8)
+				SideOcc[Black] = SideOcc[Black].ClearBit(trgt - 8)
+				SideOcc[Both] = SideOcc[Both].ClearBit(trgt - 8)
+			} else { // Black
+				PieceOcc[WP] = PieceOcc[WP].ClearBit(trgt + 8)
+				SideOcc[White] = SideOcc[White].ClearBit(trgt + 8)
+				SideOcc[Both] = SideOcc[Both].ClearBit(trgt + 8)
+			}
+		}
+		// Castling (move rook)
+		if cast == 1 {
+			switch trgt {
+			case G1:
+				PieceOcc[WR] = PieceOcc[WR].ClearBit(H1)
+				SideOcc[White] = SideOcc[White].ClearBit(H1)
+				SideOcc[Both] = SideOcc[Both].ClearBit(H1)
+
+				PieceOcc[WR] = PieceOcc[WR].SetBit(F1)
+				SideOcc[White] = SideOcc[White].SetBit(F1)
+				SideOcc[Both] = SideOcc[Both].SetBit(F1)
+			case C1:
+				PieceOcc[WR] = PieceOcc[WR].ClearBit(A1)
+				SideOcc[White] = SideOcc[White].ClearBit(A1)
+				SideOcc[Both] = SideOcc[Both].ClearBit(A1)
+
+				PieceOcc[WR] = PieceOcc[WR].SetBit(D1)
+				SideOcc[White] = SideOcc[White].SetBit(D1)
+				SideOcc[Both] = SideOcc[Both].SetBit(D1)
+			case G8:
+				PieceOcc[BR] = PieceOcc[BR].ClearBit(H8)
+				SideOcc[Black] = SideOcc[Black].ClearBit(H8)
+				SideOcc[Both] = SideOcc[Both].ClearBit(H8)
+
+				PieceOcc[BR] = PieceOcc[BR].SetBit(F8)
+				SideOcc[Black] = SideOcc[Black].SetBit(F8)
+				SideOcc[Both] = SideOcc[Both].SetBit(F8)
+			case C8:
+				PieceOcc[BR] = PieceOcc[BR].ClearBit(A8)
+				SideOcc[Black] = SideOcc[Black].ClearBit(A8)
+				SideOcc[Both] = SideOcc[Both].ClearBit(A8)
+
+				PieceOcc[BR] = PieceOcc[BR].SetBit(D8)
+				SideOcc[Black] = SideOcc[Black].SetBit(D8)
+				SideOcc[Both] = SideOcc[Both].SetBit(D8)
+			}
+		}
+
+		// Update castling rights
+		CastRights &= PostMoveCast[src]
+		CastRights &= PostMoveCast[trgt]
+
+		var k int
+
+		if SideToMove == White {
+			k = WK
+		} else { // Black
+			k = BK
+		}
+
+		// Check if move leaves the king in check
+		if IsAttacked(PieceOcc[k].GetLSB(), opp) {
+			TakeBack()
+			return 0
+		} else {
+			return 1
+		}
+	} else if DecCapt(m) == 1 {
+		MakeMove(m, AllMoves)
+	}
+
+	return 0
 }

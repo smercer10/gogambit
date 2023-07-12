@@ -29,8 +29,8 @@ func TestSetOccupancy(t *testing.T) {
 	}
 }
 
-// TestGetQueenAttacks tests the GetQueenAttacks function.
-func TestGetQueenAttacks(t *testing.T) {
+// TestGetQueenAtt tests the GetQueenAtt function.
+func TestGetQueenAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		occ    Bitboard
@@ -46,8 +46,8 @@ func TestGetQueenAttacks(t *testing.T) {
 	InitSliderAtt(Rook)
 
 	for _, tc := range testCases {
-		if result := GetQueenAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetQueenAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+		if result := GetQueenAtt(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetQueenAtt failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
 				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}

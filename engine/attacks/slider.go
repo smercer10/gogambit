@@ -127,7 +127,7 @@ func InitSliderAtt(piece int) {
 	}
 }
 
-// GetQueenAttacks returns possible queen attacks for a given square and board occ.
-func GetQueenAttacks(sq int, occ Bitboard) Bitboard {
-	return GetBishopAttacks(sq, occ) | GetRookAttacks(sq, occ)
+// GetQueenAtt returns possible queen attacks for a given square and board occ.
+func GetQueenAtt(sq int, occ Bitboard) Bitboard {
+	return GetBishopAtt(sq, occ) | GetRookAtt(sq, occ)
 }

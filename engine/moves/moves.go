@@ -28,18 +28,18 @@ func IsAttacked(sq, by int) bool {
 		return true
 	}
 
-	if (by == White && a.GetBishopAttacks(sq, SideOcc[Both])&PieceOcc[WB] != 0) ||
-		(by == Black && a.GetBishopAttacks(sq, SideOcc[Both])&PieceOcc[BB] != 0) {
+	if (by == White && a.GetBishopAtt(sq, SideOcc[Both])&PieceOcc[WB] != 0) ||
+		(by == Black && a.GetBishopAtt(sq, SideOcc[Both])&PieceOcc[BB] != 0) {
 		return true
 	}
 
-	if (by == White && a.GetRookAttacks(sq, SideOcc[Both])&PieceOcc[WR] != 0) ||
-		(by == Black && a.GetRookAttacks(sq, SideOcc[Both])&PieceOcc[BR] != 0) {
+	if (by == White && a.GetRookAtt(sq, SideOcc[Both])&PieceOcc[WR] != 0) ||
+		(by == Black && a.GetRookAtt(sq, SideOcc[Both])&PieceOcc[BR] != 0) {
 		return true
 	}
 
-	if (by == White && a.GetQueenAttacks(sq, SideOcc[Both])&PieceOcc[WQ] != 0) ||
-		(by == Black && a.GetQueenAttacks(sq, SideOcc[Both])&PieceOcc[BQ] != 0) {
+	if (by == White && a.GetQueenAtt(sq, SideOcc[Both])&PieceOcc[WQ] != 0) ||
+		(by == Black && a.GetQueenAtt(sq, SideOcc[Both])&PieceOcc[BQ] != 0) {
 		return true
 	}
 
@@ -273,7 +273,7 @@ func GenMoves() {
 			for bb != 0x0 {
 				srcSq = bb.GetLSB()
 
-				att = a.GetBishopAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+				att = a.GetBishopAtt(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
 
 				for att != 0x0 {
 					trgtSq = att.GetLSB()
@@ -297,7 +297,7 @@ func GenMoves() {
 			for bb != 0x0 {
 				srcSq = bb.GetLSB()
 
-				att = a.GetRookAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+				att = a.GetRookAtt(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
 
 				for att != 0x0 {
 					trgtSq = att.GetLSB()
@@ -321,7 +321,7 @@ func GenMoves() {
 			for bb != 0x0 {
 				srcSq = bb.GetLSB()
 
-				att = a.GetQueenAttacks(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
+				att = a.GetQueenAtt(srcSq, SideOcc[Both]) & ^SideOcc[SideToMove]
 
 				for att != 0x0 {
 					trgtSq = att.GetLSB()
@@ -343,47 +343,71 @@ func GenMoves() {
 }
 
 // EncMove encodes move details into a single integer.
-func EncMove(src, trgt, pc, prom, cap, dp, ep, cast uint8) uint32 {
-	return uint32(src) | uint32(trgt)<<6 | uint32(pc)<<12 | uint32(prom)<<16 |
-		uint32(cap)<<20 | uint32(dp)<<21 | uint32(ep)<<22 | uint32(cast)<<23
+func EncMove(src, trgt, pc, prom, cap, dp, ep, cast int) int {
+	return src | trgt<<6 | pc<<12 | prom<<16 |
+		cap<<20 | dp<<21 | ep<<22 | cast<<23
 }
 
 // DecSrc returns the source square from an encoded move.
-func DecSrc(m uint32) uint8 {
-	return uint8(m & 0x3F)
+func DecSrc(m int) int {
+	return m & 0x3F
 }
 
 // DecTrgt returns the target square from an encoded move.
-func DecTrgt(m uint32) uint8 {
-	return uint8(m & 0xFC0 >> 6)
+func DecTrgt(m int) int {
+	return m & 0xFC0 >> 6
 }
 
 // DecPc returns the moved piece type from an encoded move.
-func DecPc(m uint32) uint8 {
-	return uint8(m & 0xF000 >> 12)
+func DecPc(m int) int {
+	return m & 0xF000 >> 12
 }
 
 // DecProm returns the promotion piece type from an encoded move.
-func DecProm(m uint32) uint8 {
-	return uint8(m & 0xF0000 >> 16)
+func DecProm(m int) int {
+	return m & 0xF0000 >> 16
 }
 
 // DecCap returns the piece captured flag from an encoded move.
-func DecCap(m uint32) uint8 {
-	return uint8(m & 0x100000 >> 20)
+func DecCap(m int) int {
+	return m & 0x100000 >> 20
 }
 
 // DecDp returns the double pawn push flag from an encoded move.
-func DecDp(m uint32) uint8 {
-	return uint8(m & 0x200000 >> 21)
+func DecDp(m int) int {
+	return m & 0x200000 >> 21
 }
 
 // DecEp returns the en passant flag from an encoded move.
-func DecEp(m uint32) uint8 {
-	return uint8(m & 0x400000 >> 22)
+func DecEp(m int) int {
+	return m & 0x400000 >> 22
 }
 
 // DecCast returns the castling flag of an encoded move.
-func DecCast(m uint32) uint8 {
-	return uint8(m & 0x800000 >> 23)
+func DecCast(m int) int {
+	return m & 0x800000 >> 23
+}
+
+// MoveList contains a list of encoded moves and the count of those moves.
+type MoveList struct {
+	Moves []int
+	Count int
+}
+
+// AddMove adds an encoded move to a move list.
+func (l *MoveList) AddMove(m int) {
+	l.Moves = append(l.Moves, m)
+	l.Count++
+}
+
+// PrintMove prints an encoded move in the UCI format.
+func PrintMove(m int) {
+	fmt.Printf("%s%s%c\n", Squares[DecSrc(m)], Squares[DecTrgt(m)], PromPiece[DecProm(m)])
+}
+
+// PrintMoveList prints all the moves in a move list.
+func PrintMoveList(l *MoveList) {
+	for ct := 0; ct < l.Count; ct++ {
+		PrintMove(l.Moves[ct])
+	}
 }

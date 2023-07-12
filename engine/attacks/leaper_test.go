@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-// TestGenPawnAttacks tests the GenPawnAttacks function.
-func TestGenPawnAttacks(t *testing.T) {
+// TestGenPawnAtt tests the GenPawnAtt function.
+func TestGenPawnAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		side   int
@@ -21,15 +21,15 @@ func TestGenPawnAttacks(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GenPawnAttacks(tc.sq, tc.side); result != tc.expect {
-			t.Errorf("GenPawnAttacks failed for sq = %s, side = %s: expect 0x%x, got 0x%x",
+		if result := GenPawnAtt(tc.sq, tc.side); result != tc.expect {
+			t.Errorf("GenPawnAtt failed for sq = %s, side = %s: expect 0x%x, got 0x%x",
 				Squares[tc.sq], Sides[tc.side], tc.expect, result)
 		}
 	}
 }
 
-// TestGenKnightAttacks tests the GenKnightAttacks function.
-func TestGenKnightAttacks(t *testing.T) {
+// TestGenKnightAtt tests the GenKnightAtt function.
+func TestGenKnightAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -41,15 +41,15 @@ func TestGenKnightAttacks(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GenKnightAttacks(tc.sq); result != tc.expect {
-			t.Errorf("GenKnightAttacks failed for sq = %s: expect 0x%x, got 0x%x",
+		if result := GenKnightAtt(tc.sq); result != tc.expect {
+			t.Errorf("GenKnightAtt failed for sq = %s: expect 0x%x, got 0x%x",
 				Squares[tc.sq], tc.expect, result)
 		}
 	}
 }
 
-// TestGenKingAttacks tests the GenKingAttacks function.
-func TestGenKingAttacks(t *testing.T) {
+// TestGenKingAtt tests the GenKingAtt function.
+func TestGenKingAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		expect Bitboard
@@ -61,8 +61,8 @@ func TestGenKingAttacks(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if result := GenKingAttacks(tc.sq); result != tc.expect {
-			t.Errorf("GenKingAttacks failed for sq = %s: expect 0x%x, got 0x%x",
+		if result := GenKingAtt(tc.sq); result != tc.expect {
+			t.Errorf("GenKingAtt failed for sq = %s: expect 0x%x, got 0x%x",
 				Squares[tc.sq], tc.expect, result)
 		}
 	}

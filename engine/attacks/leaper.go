@@ -6,8 +6,8 @@ import (
 	. "gogambit/engine/globals"
 )
 
-// GenPawnAttacks generates the pawn attacks for a given square and side.
-func GenPawnAttacks(sq, side int) Bitboard {
+// GenPawnAtt generates the pawn attacks for a given square and side.
+func GenPawnAtt(sq, side int) Bitboard {
 	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
@@ -23,8 +23,8 @@ func GenPawnAttacks(sq, side int) Bitboard {
 	return att
 }
 
-// GenKnightAttacks generates the knight attacks for a given square.
-func GenKnightAttacks(sq int) Bitboard {
+// GenKnightAtt generates the knight attacks for a given square.
+func GenKnightAtt(sq int) Bitboard {
 	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
@@ -41,8 +41,8 @@ func GenKnightAttacks(sq int) Bitboard {
 	return att
 }
 
-// GenKingAttacks generates the king attacks for a given square.
-func GenKingAttacks(sq int) Bitboard {
+// GenKingAtt generates the king attacks for a given square.
+func GenKingAtt(sq int) Bitboard {
 	att, bb := Bitboard(0x0), Bitboard(0x0)
 
 	bb = bb.SetBit(sq)
@@ -71,9 +71,9 @@ var KingAttacks [64]Bitboard
 // InitLeaperAtt initializes the lookup tables for leaper piece attacks.
 func InitLeaperAtt() {
 	for sq := A1; sq <= H8; sq++ {
-		PawnAttacks[White][sq] = GenPawnAttacks(sq, White)
-		PawnAttacks[Black][sq] = GenPawnAttacks(sq, Black)
-		KnightAttacks[sq] = GenKnightAttacks(sq)
-		KingAttacks[sq] = GenKingAttacks(sq)
+		PawnAttacks[White][sq] = GenPawnAtt(sq, White)
+		PawnAttacks[Black][sq] = GenPawnAtt(sq, Black)
+		KnightAttacks[sq] = GenKnightAtt(sq)
+		KingAttacks[sq] = GenKingAtt(sq)
 	}
 }

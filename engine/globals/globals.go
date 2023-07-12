@@ -160,6 +160,18 @@ var CharToPiece = map[byte]int{
 	'k': BK,
 }
 
+// PromPiece maps side-specific piece values to side-agnostic ASCII piece types for promotions.
+var PromPiece = map[int]byte{
+	WN: 'n',
+	WB: 'b',
+	WR: 'r',
+	WQ: 'q',
+	BN: 'n',
+	BB: 'b',
+	BR: 'r',
+	BQ: 'q',
+}
+
 // CharToSquare maps string squares to their enum values.
 var CharToSquare = map[string]int{
 	"a1": A1, "b1": B1, "c1": C1, "d1": D1, "e1": E1, "f1": F1, "g1": G1, "h1": H1,

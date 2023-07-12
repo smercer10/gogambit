@@ -89,3 +89,38 @@ func TestEncAndDec(t *testing.T) {
 		t.Errorf("DecCast failed: expect 0, got %d", cast)
 	}
 }
+
+// TestAddMove tests the AddMove function.
+func TestAddMove(t *testing.T) {
+	l := MoveList{}
+
+	l.AddMove(12345)
+
+	if l.Moves[0] != 12345 {
+		t.Errorf("AddMove failed for m = 12345: expect Moves[0] = 12345, got %d", l.Moves[0])
+	}
+
+	if l.Count != 1 {
+		t.Errorf("AddMove failed for m = 12345: expect Count = 1, got %d", l.Count)
+	}
+
+	l.AddMove(54321)
+
+	if l.Moves[1] != 54321 {
+		t.Errorf("AddMove failed for m = 54321: expect Moves[1] = 54321, got %d", l.Moves[1])
+	}
+
+	if l.Count != 2 {
+		t.Errorf("AddMove failed for m = 54321: expect Count = 2, got %d", l.Count)
+	}
+
+	l.AddMove(99999)
+
+	if l.Moves[2] != 99999 {
+		t.Errorf("AddMove failed for m = 99999: expect Moves[2] = 99999, got %d", l.Moves[2])
+	}
+
+	if l.Count != 3 {
+		t.Errorf("AddMove failed for m = 99999: expect Count = 3, got %d", l.Count)
+	}
+}

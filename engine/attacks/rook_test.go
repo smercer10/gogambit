@@ -48,8 +48,8 @@ func TestGenRookAttOTF(t *testing.T) {
 	}
 }
 
-// TestGetRookAttacks tests the GetRookAttacks function.
-func TestGetRookAttacks(t *testing.T) {
+// TestGetRookAtt tests the GetRookAtt function.
+func TestGetRookAtt(t *testing.T) {
 	testCases := []struct {
 		sq     int
 		occ    Bitboard
@@ -66,8 +66,8 @@ func TestGetRookAttacks(t *testing.T) {
 	InitSliderAtt(Rook)
 
 	for _, tc := range testCases {
-		if result := GetRookAttacks(tc.sq, tc.occ); result != tc.expect {
-			t.Errorf("GetRookAttacks failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
+		if result := GetRookAtt(tc.sq, tc.occ); result != tc.expect {
+			t.Errorf("GetRookAtt failed for sq = %s, occ = 0x%x: expect 0x%x, got 0x%x",
 				Squares[tc.sq], tc.occ, tc.expect, result)
 		}
 	}
